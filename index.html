@@ -10,6 +10,8 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrollbars when roses fall */
+            background-color: #f3f3f3;
             transition: background 1s ease;
         }
 
@@ -48,9 +50,8 @@
         .rose {
             position: absolute;
             top: -10%; /* Start above the viewport */
-            animation: fall 5s ease-in infinite;
+            animation: fall 5s linear infinite;
             pointer-events: none;
-            font-size: 20px;
         }
 
         @keyframes fall {
@@ -116,8 +117,8 @@
                 rose.textContent = "🌹";
                 rose.className = "rose";
                 rose.style.left = Math.random() * 100 + "vw";
-                rose.style.animationDelay = Math.random() * 3 + "s";
-                rose.style.fontSize = Math.random() * 20 + 10 + "px";
+                rose.style.animationDelay = Math.random() * 5 + "s"; /* Delay between roses */
+                rose.style.fontSize = Math.random() * 20 + 10 + "px"; /* Random font size */
                 document.body.appendChild(rose);
 
                 rose.addEventListener('animationend', () => {

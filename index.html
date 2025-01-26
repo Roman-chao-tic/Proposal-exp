@@ -11,9 +11,8 @@
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
-            overflow: hidden; /* Prevent scrollbars when roses fall */
+            overflow: hidden; /* Prevent scrollbars */
             background-color: #f3f3f3;
-            transition: background 1s ease;
         }
 
         #typing-container {
@@ -24,7 +23,7 @@
             font-size: 16px;
             padding: 20px;
             color: #272E5C;
-            max-width: 90%;
+            z-index: 2; /* Keep the text above the roses and background */
         }
 
         .no-btn {
@@ -46,12 +45,24 @@
             transform: translateY(-2px);
         }
 
+        #background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Keep the image behind the text and roses */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
         .rose {
             position: absolute;
             top: -10%; /* Start above the viewport */
-            animation: fall 4s linear infinite;
+            animation: fall 5s linear infinite;
             pointer-events: none;
-            color: red;
+            z-index: 1; /* Keep roses above the background */
         }
 
         @keyframes fall {
@@ -67,6 +78,7 @@
     </style>
 </head>
 <body>
+    <div id="background-image"></div> <!-- Background image container -->
     <div id="typing-container"></div>
 
     <script>
@@ -89,7 +101,9 @@
                 button.remove();
                 typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
                     setTimeout(() => {
-                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
+                        typeText(container, "Well, anyways ei ne phul from your fool", () => {
+                            updateBackgroundAndShowRoses();
+                        });
                     }, 1000);
                 });
             };
@@ -112,13 +126,12 @@
             }, 100);
         }
 
-        // Display falling roses
-        function showRoseAnimation() {
-            // Change background
-            document.body.style.transition = "background 1s ease";
-            document.body.style.background = "#ffd1dc";
+        // Update the background and start the rose animation
+        function updateBackgroundAndShowRoses() {
+            const bgImage = document.getElementById('background-image');
+            bgImage.style.backgroundImage = "url('https://photos.google.com/share/AF1QipPKXeAcY2ONdUA0AAfA7PA1qhvtoJaQ2WUeEJgcpEUyj5JE1IZ1p-zq8Ct7kU3Cvw/photo/AF1QipO5MjmHlf3gvfmpEs5tyemFdb9WGz_DGzEvpsBV?key=eDBTeUN4T2M2VW9tQllaZ0VqaEV5cEliVWR6Tktn')";
 
-            // Create roses
+            // Start rose animation
             for (let i = 0; i < 50; i++) {
                 const rose = document.createElement('div');
                 rose.textContent = "🌹";

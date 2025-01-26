@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Tulip Animation</title>
+    <title>Interactive Rose Shower</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Press Start 2P', cursive;
             overflow: hidden; /* Prevent scrollbars when roses fall */
             background-color: #f3f3f3;
             transition: background 1s ease;
@@ -20,12 +21,10 @@
             top: 50px;
             left: 50px;
             text-align: left;
-            font-size: 24px;
+            font-size: 16px;
             padding: 20px;
             color: #272E5C;
-            width: auto;
             max-width: 90%;
-            overflow: hidden;
         }
 
         .no-btn {
@@ -50,8 +49,9 @@
         .rose {
             position: absolute;
             top: -10%; /* Start above the viewport */
-            animation: fall 5s linear infinite;
+            animation: fall 4s linear infinite;
             pointer-events: none;
+            color: red;
         }
 
         @keyframes fall {
@@ -61,7 +61,7 @@
             }
             100% {
                 transform: translateY(110%);
-                opacity: 0.8;
+                opacity: 0.5;
             }
         }
     </style>
@@ -70,15 +70,17 @@
     <div id="typing-container"></div>
 
     <script>
+        // Initialize the interaction
         window.onload = () => {
             const typingContainer = document.getElementById('typing-container');
             typingContainer.style.display = 'block';
-            let text = "Gandu ta toke flowers dilo??";
+            const text = "Gandu ta toke flowers dilo??";
             typeText(typingContainer, text, () => {
                 addNahButton(typingContainer);
             });
         };
 
+        // Add the "Nah" button
         function addNahButton(container) {
             const button = document.createElement('button');
             button.textContent = "Nah";
@@ -94,6 +96,7 @@
             container.appendChild(button);
         }
 
+        // Typing effect
         function typeText(container, text, callback) {
             const newLine = document.createElement('div');
             container.appendChild(newLine);
@@ -109,18 +112,23 @@
             }, 100);
         }
 
+        // Display falling roses
         function showRoseAnimation() {
+            // Change background
             document.body.style.transition = "background 1s ease";
-            document.body.style.background = "url('https://images.unsplash.com/photo-1532322586321-8c531a39049b?crop=entropy&cs=tinysrgb&fit=max&ixid=MXwyMDg5MXwwfDF8c2VhcmNofDdfMHxlZnJlZHNoJTIwdG93ZXJ8ZW58MHx8fHwxNjEyNzM0Mzk5&ixlib=rb-1.2.1&q=80&w=400') no-repeat center center/cover";
+            document.body.style.background = "#ffd1dc";
+
+            // Create roses
             for (let i = 0; i < 50; i++) {
                 const rose = document.createElement('div');
                 rose.textContent = "🌹";
                 rose.className = "rose";
-                rose.style.left = Math.random() * 100 + "vw";
-                rose.style.animationDelay = Math.random() * 5 + "s"; /* Delay between roses */
-                rose.style.fontSize = Math.random() * 20 + 10 + "px"; /* Random font size */
+                rose.style.left = Math.random() * 100 + "vw"; // Random horizontal position
+                rose.style.fontSize = Math.random() * 20 + 10 + "px"; // Random font size
+                rose.style.animationDelay = Math.random() * 3 + "s"; // Random delay
                 document.body.appendChild(rose);
 
+                // Remove rose after animation
                 rose.addEventListener('animationend', () => {
                     rose.remove();
                 });

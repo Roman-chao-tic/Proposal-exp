@@ -3,252 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Girlfriend?</title>
+    <title>Interactive Tulip Animation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
+        /* Basic styling */
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzJ2Z3VjdjI4NDZpbzM2Nzgwem9zNDRudW5pZ29lbDJrbXIyaTZ2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xWMPYx55WNhX136T0V/giphy.gif') no-repeat center center/cover;
             font-family: 'Press Start 2P', cursive;
-            color: #fff;
-            text-align: center;
-            transition: background 1.5s ease-in-out;
+            background-color: #000; /* Retro black background */
+            color: #00FF00; /* Retro green text */
+            overflow: hidden;
         }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .message {
-            font-size: 2rem;
-            font-weight: bold;
-            position: relative;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px #000;
-            animation: hover-effect 1.5s infinite;
-            color: #2A562C;
-        }
-
-        .message span {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .message span[data-tooltip]:hover {
-            color: #ff0; /* Change the text color on hover */
-            text-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
-        }
-
-        .message span[data-tooltip]:hover::after {
-            content: attr(data-tooltip);
+        /* Position the typing container */
+        #typing-container {
             position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            border-radius: 5px;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            z-index: 10;
-            opacity: 0;
-            animation: fade-in 0.3s forwards;
+            top: 50px;
+            left: 50px;
+            text-align: left;
+            font-size: 16px;
+            padding: 20px;
+            color: #00FF00; /* Retro green text */
+            width: auto;
+            max-width: 90%;
+            overflow: hidden;
+            text-shadow: 1px 1px 0 #003300, 2px 2px 0 #003300; /* Pixelated shadow */
         }
 
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .buttons {
-            margin-top: 20px;
-        }
-
-        button {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
-            padding: 15px 30px;
-            margin: 10px;
-            border: none;
-            cursor: pointer;
-            color: #fff;
-            background: linear-gradient(to bottom, #444, #222);
-            border: 4px solid #000;
-            box-shadow: 4px 4px 0 #000;
-            text-transform: uppercase;
-            text-shadow: 2px 2px #000;
-            transition: transform 0.1s ease;
-        }
-
-        button:active {
-            transform: translate(4px, 4px);
-            box-shadow: none;
-        }
-
-        .yes-btn {
-            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
-            border-color: #1B5E20;
-        }
-
-        .no-btn {
-            background: linear-gradient(to bottom, #f44336, #C62828);
-            border-color: #B71C1C;
-        }
-
-        #pleading-message { 
-            display: none; 
-            font-size: 1.5rem; 
-            font-weight: bold; 
-            color: #2A562C; 
-            padding: 10px 20px; 
-            border-radius: 10px; 
-            margin-top: 20px; 
-            text-shadow: 2px 2px 4px #000; 
-            animation: hover-effect 1.5s infinite;
-            width: 80%;
-            max-width: 400px; 
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @keyframes hover-effect {
+        /* Blinking effect for retro-style text */
+        @keyframes blink {
             0%, 100% {
-                transform: translateY(0);
+                opacity: 1;
             }
             50% {
-                transform: translateY(-10px);
+                opacity: 0.5;
             }
         }
 
-        @media (max-width: 600px) {
-            .message {
-                font-size: 1.5rem;
-                padding: 0 20px;
-            }
-
-            button {
-                font-size: 0.8rem;
-                padding: 10px 20px;
-            }
-
-            #pleading-message {
-                font-size: 1rem;
-            }
+        #typing-container {
+            animation: blink 1s infinite;
         }
 
-        .glowing-tulip {
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
-            animation: glow 1.5s infinite alternate;
+        /* Style for the 'Nah' button */
+        .no-btn {
+            padding: 10px 20px;
+            font-size: 14px;
             cursor: pointer;
+            border: 4px solid #00FF00; /* Retro green border */
+            background-color: #000; /* Black background */
+            color: #00FF00; /* Green text */
+            margin-top: 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 1px 1px 0 #003300, 2px 2px 0 #003300; /* Retro shadow */
+            transition: all 0.2s ease-in-out;
         }
 
-        @keyframes glow {
-            0% {
-                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
-            }
-            100% {
-                text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff, 0 0 35px #ff00ff, 0 0 45px #ff00ff;
-            }
-        }
-
-        .typing-container {
-            display: none;
-            position: absolute;
-            top: 20%;
-            left: 10%;
+        .no-btn:hover {
+            background-color: #00FF00;
             color: #000;
-            font-size: 1.2rem;
-            background: #fff;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border: 4px solid #000;
+            text-shadow: none;
         }
 
+        /* Rose animation */
         .rose {
             position: absolute;
-            animation: fall 3s linear infinite;
-            opacity: 0.8;
+            top: 0;
+            animation: rise 5s ease-in infinite;
+            pointer-events: none;
+            font-size: 20px;
         }
 
-        @keyframes fall {
+        @keyframes rise {
             0% {
-                transform: translateY(-100px);
-                opacity: 1;
+                transform: translateY(0);
             }
             100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
+                transform: translateY(-100vh);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="message">
-            Will You<span data-tooltip="Chutki">*</span> Be My<span data-tooltip="Abir">*</span> Girlfriend? Plsss🥺🥺🥺
-        </div>
-        <div class="buttons">
-            <button class="yes-btn" onclick="handleYes()">Yes</button>
-            <button class="no-btn" onclick="handleNo()">No</button>
-        </div>
-    </div>
-    <div id="pleading-message">Pleaseee say yes! 😭</div>
-    <div class="typing-container" id="typing-container"></div>
+    <div id="typing-container"></div>
 
     <script>
-        let pleadingMessages = [
-            "Pleaseee say yes! I'm begging! 🙏",
-            "Amay erom bhabe na bolte parli toh?🥺",
-            "You're my sunshine, don't leave me in the rain! 🌞🌧️",
-            "Khuuuuuub dukkho dichhis amay 😭"
-        ];
-        let messageIndex = 0;
-
-        function handleYes() {
-            document.body.style.background = "url('https://img.freepik.com/free-photo/8-bit-graphics-pixels-scene-with-tulip-field_23-2151120922.jpg?t=st=1737836128~exp=1737839728~hmac=907ee67857319be9ce01a836741c1687136709863e8af2d01a26b324e07aa151&w=1060') no-repeat center center/cover";
-            setTimeout(() => {
-                document.querySelector('.message').innerHTML = `I love you too hunnyyy mwahhhh 💕<span class='glowing-tulip' onclick='handleTulipClick()'>🌷</span>`;
-                document.querySelector('.message').style.color = '#2A562C';  // Set the color here
-                document.querySelector('.buttons').style.display = 'none';
-                document.getElementById('pleading-message').style.display = 'none';
-            }, 500);
-        }
-
-        function handleNo() {
-            document.body.style.background = "url('https://img.wattpad.com/94192b7d7e77c39cbcf3d9959d0233b90641bdc2/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f776174747061642d6d656469612d736572766963652f53746f7279496d6167652f335558695a4e5f664850474d52413d3d2d3534393733333239332e313532306263356361343933326665643733373837363832373835372e676966?s=fit') no-repeat center center/cover";
-            setTimeout(() => {
-                document.getElementById('pleading-message').innerText = pleadingMessages[messageIndex];
-                document.getElementById('pleading-message').style.display = 'block';
-                messageIndex = (messageIndex + 1) % pleadingMessages.length;
-            }, 500);
-        }
-
-        function handleTulipClick() {
-            document.body.style.transition = "background 1s ease";
-            document.body.style.background = "#fff";
-            document.querySelector('.container').style.display = 'none';
-
+        window.onload = () => {
             const typingContainer = document.getElementById('typing-container');
             typingContainer.style.display = 'block';
-            let text = "Gandu ta toke flowers dilo??";
+            let text = "GANDU TA TOKE FLOWERS DILO??";
             typeText(typingContainer, text, () => {
                 addNahButton(typingContainer);
             });
-        }
+        };
 
         function addNahButton(container) {
             const button = document.createElement('button');
@@ -256,9 +106,9 @@
             button.className = "no-btn";
             button.onclick = () => {
                 button.remove();
-                typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
+                typeText(container, "JANTAMMM!!!!!! WHAT A F*CKING INCOMPETENT😔", () => {
                     setTimeout(() => {
-                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
+                        typeText(container, "WELL, ANYWAYS EI NE PHUL FROM YOUR FOOL", showRoseAnimation);
                     }, 1000);
                 });
             };
@@ -279,8 +129,7 @@
         }
 
         function showRoseAnimation() {
-            document.body.style.transition = "background 1s ease";
-            document.body.style.background = "url('https://photos.google.com/share/AF1QipPKXeAcY2ONdUA0AAfA7PA1qhvtoJaQ2WUeEJgcpEUyj5JE1IZ1p-zq8Ct7kU3Cvw/photo/AF1QipO5MjmHlf3gvfmpEs5tyemFdb9WGz_DGzEvpsBV?key=eDBTeUN4T2M2VW9tQllaZ0VqaEV5cEliVWR6Tktn') no-repeat center center/cover";
+            document.body.style.background = "#001a00"; /* Retro green-black background */
             for (let i = 0; i < 50; i++) {
                 const rose = document.createElement('div');
                 rose.textContent = "🌹";
@@ -288,6 +137,7 @@
                 rose.style.left = Math.random() * 100 + "vw";
                 rose.style.animationDelay = Math.random() * 3 + "s";
                 rose.style.fontSize = Math.random() * 20 + 10 + "px";
+                rose.style.color = "#FF0000"; /* Retro red rose */
                 document.body.appendChild(rose);
 
                 rose.addEventListener('animationend', () => {

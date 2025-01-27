@@ -176,6 +176,15 @@
             // Show the 'Awww' button after roses start falling
             const awwwButton = document.getElementById('awww-btn');
             awwwButton.style.display = 'block';
+
+            // Add redirect and clicking animation to the button
+            awwwButton.onclick = () => {
+                awwwButton.style.transform = 'translate(4px, 4px)';
+                awwwButton.style.boxShadow = 'none';
+                setTimeout(() => {
+                    window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
+                }, 100); // Wait briefly for click effect
+            };
         }
     </script>
 </body>

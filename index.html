@@ -3,114 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Rose Shower</title>
+    <title>Interactive Tulip Animation</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
         body {
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
-            overflow: hidden; /* Prevent scrollbars */
-            background-color: #f3f3f3;
+            background: #fff; /* White background */
+            overflow: hidden;
         }
 
+        /* Typing container for the text */
         #typing-container {
-            position: absolute;
+            position: relative;
+            z-index: 3; /* Ensure text appears above the image */
             top: 50px;
             left: 50px;
             text-align: left;
-            font-size: 16px;
+            font-size: 24px;
             padding: 20px;
             color: #272E5C;
-            z-index: 2; /* Keep the text above the roses and background */
+            width: auto;
+            max-width: 90%;
+            overflow: hidden;
         }
 
-        .no-btn {
-            padding: 12px 24px;
-            font-size: 18px;
+        /* General button styling */
+        .retro-btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-family: 'Press Start 2P', cursive;
             cursor: pointer;
-            border: 2px solid #c0392b;
-            background-color: #e74c3c;
+            border: none;
+            background: #ff4747;
             color: #fff;
-            margin-top: 40px;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease-in-out;
+            text-shadow: 1px 1px 0 #000, 2px 2px 0 #000;
+            margin-top: 20px;
+            display: inline-block;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #000; /* Creates a blocky shadow */
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
 
-        .no-btn:hover {
-            background-color: #c0392b;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
+        /* Hover effect for the retro buttons */
+        .retro-btn:hover {
+            transform: translate(-2px, -2px); /* Button shifts slightly up and left */
+            box-shadow: 6px 6px 0 #000; /* Increases the shadow size */
         }
 
-        #background-image {
-            position: fixed;
+        /* 'Nah' button specific styles */
+        .no-btn {
+            background: #ff4747; /* Bright red */
+        }
+
+        /* 'Awww' button specific styles */
+        .awww-btn {
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: #47c1ff; /* Bright blue */
+            display: none; /* Initially hidden */
+        }
+
+        /* Fool image container */
+        #fool-image {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0; /* Keep the image behind the text and roses */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: url('Fool.jpg') no-repeat center center/contain;
+            opacity: 0; /* Initially hidden */
+            z-index: 2; /* Below the text */
+            transition: opacity 1s ease; /* Smooth fade-in */
         }
 
+        /* Rose animation (falling effect) */
         .rose {
             position: absolute;
-            top: -10%; /* Start above the viewport */
-            animation: fall 5s linear infinite;
+            top: -10%;
+            animation: fall 5s ease-in infinite;
             pointer-events: none;
-            z-index: 1; /* Keep roses above the background */
+            font-size: 20px;
+            z-index: 4; /* Roses appear above everything else */
         }
 
         @keyframes fall {
             0% {
                 transform: translateY(-10%);
-                opacity: 1;
             }
             100% {
-                transform: translateY(110%);
-                opacity: 0.5;
+                transform: translateY(110vh);
             }
         }
     </style>
 </head>
 <body>
-    <div id="background-image"></div> <!-- Background image container -->
+    <!-- Typing container for the text -->
     <div id="typing-container"></div>
 
+    <!-- Fool image (hidden initially) -->
+    <div id="fool-image"></div>
+
+    <!-- 'Awww' button -->
+    <button class="retro-btn awww-btn" id="awww-btn">Awww</button>
+
     <script>
-        // Initialize the interaction
+        // Start the interaction immediately upon page load
         window.onload = () => {
             const typingContainer = document.getElementById('typing-container');
             typingContainer.style.display = 'block';
-            const text = "Gandu ta toke flowers dilo??";
+            let text = "Gandu ta toke flowers dilo??";
             typeText(typingContainer, text, () => {
                 addNahButton(typingContainer);
             });
         };
 
-        // Add the "Nah" button
         function addNahButton(container) {
             const button = document.createElement('button');
             button.textContent = "Nah";
-            button.className = "no-btn";
+            button.className = "retro-btn no-btn";
             button.onclick = () => {
                 button.remove();
                 typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
                     setTimeout(() => {
-                        typeText(container, "Well, anyways ei ne phul from your fool", () => {
-                            updateBackgroundAndShowRoses();
-                        });
+                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
                     }, 1000);
                 });
             };
             container.appendChild(button);
         }
 
-        // Typing effect
         function typeText(container, text, callback) {
             const newLine = document.createElement('div');
             container.appendChild(newLine);
@@ -126,26 +151,29 @@
             }, 100);
         }
 
-        // Update the background and start the rose animation
-        function updateBackgroundAndShowRoses() {
-            const bgImage = document.getElementById('background-image');
-            bgImage.style.backgroundImage = "url('https://photos.google.com/share/AF1QipPKXeAcY2ONdUA0AAfA7PA1qhvtoJaQ2WUeEJgcpEUyj5JE1IZ1p-zq8Ct7kU3Cvw/photo/AF1QipO5MjmHlf3gvfmpEs5tyemFdb9WGz_DGzEvpsBV?key=eDBTeUN4T2M2VW9tQllaZ0VqaEV5cEliVWR6Tktn')";
+        function showRoseAnimation() {
+            // Make the Fool.jpg image visible
+            const foolImage = document.getElementById('fool-image');
+            foolImage.style.opacity = 1; // Fade in the Fool.jpg image
 
-            // Start rose animation
+            // Generate falling roses
             for (let i = 0; i < 50; i++) {
                 const rose = document.createElement('div');
                 rose.textContent = "🌹";
                 rose.className = "rose";
-                rose.style.left = Math.random() * 100 + "vw"; // Random horizontal position
-                rose.style.fontSize = Math.random() * 20 + 10 + "px"; // Random font size
-                rose.style.animationDelay = Math.random() * 3 + "s"; // Random delay
+                rose.style.left = Math.random() * 100 + "vw";
+                rose.style.animationDelay = Math.random() * 3 + "s";
+                rose.style.fontSize = Math.random() * 20 + 20 + "px"; // Adjusted size for visibility
                 document.body.appendChild(rose);
 
-                // Remove rose after animation
                 rose.addEventListener('animationend', () => {
                     rose.remove();
                 });
             }
+
+            // Show the 'Awww' button after roses start falling
+            const awwwButton = document.getElementById('awww-btn');
+            awwwButton.style.display = 'block';
         }
     </script>
 </body>

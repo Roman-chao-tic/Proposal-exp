@@ -10,18 +10,18 @@
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
-            background: #fff; /* White background */
+            background: #fff;
             overflow: hidden;
         }
 
         /* Typing container for the text */
         #typing-container {
             position: relative;
-            z-index: 3; /* Ensure text appears above the image */
+            z-index: 3;
             top: 50px;
             left: 50px;
             text-align: left;
-            font-size: 24px;
+            font-size: 1rem;
             padding: 20px;
             color: #272E5C;
             width: auto;
@@ -29,41 +29,43 @@
             overflow: hidden;
         }
 
-        /* General button styling */
-        .retro-btn {
-            padding: 12px 20px;
-            font-size: 16px;
+        /* Shared button styles */
+        button {
             font-family: 'Press Start 2P', cursive;
-            cursor: pointer;
+            font-size: 1rem;
+            padding: 15px 30px;
+            margin: 10px;
             border: none;
-            background: #ff4747;
+            cursor: pointer;
             color: #fff;
-            text-shadow: 1px 1px 0 #000, 2px 2px 0 #000;
-            margin-top: 20px;
-            display: inline-block;
-            border-radius: 0;
-            box-shadow: 4px 4px 0 #000; /* Creates a blocky shadow */
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            background: linear-gradient(to bottom, #444, #222);
+            border: 4px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            text-transform: uppercase;
+            text-shadow: 2px 2px #000;
+            transition: transform 0.1s ease;
         }
 
-        /* Hover effect for the retro buttons */
-        .retro-btn:hover {
-            transform: translate(-2px, -2px); /* Button shifts slightly up and left */
-            box-shadow: 6px 6px 0 #000; /* Increases the shadow size */
+        /* Button active effect */
+        button:active {
+            transform: translate(4px, 4px);
+            box-shadow: none;
         }
 
         /* 'Nah' button specific styles */
         .no-btn {
-            background: #ff4747; /* Bright red */
+            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+            border-color: #a93226;
         }
 
         /* 'Awww' button specific styles */
         .awww-btn {
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            border-color: #1B5E20;
             position: absolute;
             top: 50%;
             right: 30px;
             transform: translateY(-50%);
-            background: #47c1ff; /* Bright blue */
             display: none; /* Initially hidden */
         }
 
@@ -75,9 +77,9 @@
             width: 100%;
             height: 100%;
             background: url('Fool.jpg') no-repeat center center/contain;
-            opacity: 0; /* Initially hidden */
-            z-index: 2; /* Below the text */
-            transition: opacity 1s ease; /* Smooth fade-in */
+            opacity: 0;
+            z-index: 2;
+            transition: opacity 1s ease;
         }
 
         /* Rose animation (falling effect) */
@@ -87,7 +89,7 @@
             animation: fall 5s ease-in infinite;
             pointer-events: none;
             font-size: 20px;
-            z-index: 4; /* Roses appear above everything else */
+            z-index: 4;
         }
 
         @keyframes fall {
@@ -108,7 +110,7 @@
     <div id="fool-image"></div>
 
     <!-- 'Awww' button -->
-    <button class="retro-btn awww-btn" id="awww-btn">Awww</button>
+    <button class="awww-btn" id="awww-btn">Awww</button>
 
     <script>
         // Start the interaction immediately upon page load
@@ -124,7 +126,7 @@
         function addNahButton(container) {
             const button = document.createElement('button');
             button.textContent = "Nah";
-            button.className = "retro-btn no-btn";
+            button.className = "no-btn";
             button.onclick = () => {
                 button.remove();
                 typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {

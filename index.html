@@ -14,36 +14,84 @@
         body {
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-            background: url('usss.jpg') no-repeat center center;
-            background-size: contain;
             background-color: black;
             overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            width: 100vmin;
+            height: 100vmin;
+            background-color: black;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: circleShrink 2s ease-in-out forwards;
+        }
+
+        .content {
+            text-align: center;
+            color: white;
             font-family: "Courier New", Courier, monospace;
+            display: none;
         }
 
         .headline {
-            margin-top: 8vh;
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 5px;
-            color: white; /* Plain white color */
+            animation: pixelatedGlow 1.5s infinite alternate;
         }
 
         .sub-headline {
-            margin-top: 1rem;
-            font-size: 1.8rem;
-            color: white; /* Plain white color */
+            font-size: 2rem;
+            margin-top: 20px;
+            animation: pixelatedGlow 2s infinite alternate;
+        }
+
+        @keyframes circleShrink {
+            from {
+                width: 100vmin;
+                height: 100vmin;
+            }
+            to {
+                width: 0;
+                height: 0;
+            }
+        }
+
+        @keyframes pixelatedGlow {
+            0% {
+                text-shadow: 0 0 5px red, 0 0 10px orange, 0 0 15px yellow, 0 0 20px green, 0 0 25px cyan, 0 0 30px blue, 0 0 35px violet;
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 10px red, 0 0 20px orange, 0 0 30px yellow, 0 0 40px green, 0 0 50px cyan, 0 0 60px blue, 0 0 70px violet;
+                transform: scale(1.1);
+            }
         }
     </style>
 </head>
 <body>
 
+<div class="circle"></div>
+<div class="content">
     <div class="headline">CONGRATULATIONS!!!!!!</div>
     <div class="sub-headline">You are now my Girlfriend🤭🤭</div>
+</div>
+
+<script>
+    window.onload = function() {
+        setTimeout(() => {
+            document.querySelector('.circle').style.display = 'none';
+            document.querySelector('.content').style.display = 'block';
+        }, 2000); // Wait for the transition to finish before showing the content
+    }
+</script>
 
 </body>
 </html>

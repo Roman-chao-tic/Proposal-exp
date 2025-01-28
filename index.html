@@ -59,17 +59,6 @@
             border-color: #a93226;
         }
 
-        /* 'Awww' button specific styles */
-        .awww-btn {
-            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
-            border-color: #1B5E20;
-            position: absolute;
-            top: 50%;
-            right: 30px;
-            transform: translateY(-50%);
-            display: none; /* Initially hidden */
-        }
-
         /* Fool image container */
         #fool-image {
             position: absolute;
@@ -101,6 +90,29 @@
                 transform: translateY(110vh);
             }
         }
+
+        /* Big rose with shining effect */
+        #big-rose {
+            position: absolute;
+            right: 50px;
+            bottom: 50px;
+            font-size: 80px;
+            cursor: pointer;
+            animation: shine 1.5s infinite alternate;
+            z-index: 5;
+            display: none; /* Hidden initially */
+        }
+
+        @keyframes shine {
+            0% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            100% {
+                transform: scale(1.2);
+                filter: brightness(1.5);
+            }
+        }
     </style>
 </head>
 <body>
@@ -110,8 +122,8 @@
     <!-- Fool image (hidden initially) -->
     <div id="fool-image"></div>
 
-    <!-- 'Awww' button -->
-    <button class="awww-btn" id="awww-btn">Awww</button>
+    <!-- Big rose with shine effect -->
+    <div id="big-rose" onclick="redirectToProposal()">🌹</div>
 
     <script>
         // Start the interaction immediately upon page load
@@ -178,18 +190,13 @@
                 });
             }
 
-            // Show the 'Awww' button after roses start falling
-            const awwwButton = document.getElementById('awww-btn');
-            awwwButton.style.display = 'block';
+            // Show the big shining rose
+            const bigRose = document.getElementById('big-rose');
+            bigRose.style.display = 'block';
+        }
 
-            // Add redirect and clicking animation to the button
-            awwwButton.onclick = () => {
-                awwwButton.style.transform = 'translate(4px, 4px)';
-                awwwButton.style.boxShadow = 'none';
-                setTimeout(() => {
-                    window.location.href = "https://roman-chao-tic.github.io/Proposal-2/";
-                }, 100); // Wait briefly for click effect
-            };
+        function redirectToProposal() {
+            window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
         }
     </script>
 </body>

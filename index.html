@@ -3,201 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Tulip Animation</title>
+    <title>Congrats</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Press Start 2P', cursive;
-            background: #000; /* Set initial background to black */
-            color: #fff;
-            overflow: hidden;
+            box-sizing: border-box;
         }
 
-        /* Typing container for the text */
-        #typing-container {
-            position: relative;
-            z-index: 3;
-            top: 50px;
-            left: 50px;
-            text-align: left;
-            font-size: 1rem;
-            padding: 20px;
-            color: #fff;
-            width: auto;
-            max-width: 90%;
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background: url('usss.jpg') no-repeat center center;
+            background-size: contain; /* Ensures the entire image fits within the viewport */
+            background-color: black; /* Fills empty space if the image doesn't cover the whole area */
             overflow: hidden;
+            font-family: "Courier New", Courier, monospace;
         }
 
-        /* Shared button styles */
-        button {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
-            padding: 15px 30px;
-            margin: 10px;
-            border: none;
-            cursor: pointer;
-            color: #fff;
-            background: linear-gradient(to bottom, #444, #222);
-            border: 4px solid #000;
-            box-shadow: 4px 4px 0 #000;
+        .headline {
+            margin-top: 8vh;
+            font-size: 3.5rem;
+            font-weight: bold;
             text-transform: uppercase;
-            text-shadow: 2px 2px #000;
-            transition: transform 0.1s ease;
+            letter-spacing: 5px;
+            color: white;
+            animation: growAndGlow 3s infinite ease-in-out, rainbow 6s infinite linear;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
-        /* Button active effect */
-        button:active {
-            transform: translate(4px, 4px);
-            box-shadow: none;
+        .sub-headline {
+            margin-top: 1rem;
+            font-size: 1.8rem;
+            animation: growAndGlow 3s infinite ease-in-out, rainbow 6s infinite linear;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
-        /* 'Nah' button specific styles */
-        .no-btn {
-            background: linear-gradient(to bottom, #e74c3c, #c0392b);
-            border-color: #a93226;
-        }
-
-        /* Fool image container */
-        #fool-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('Fool.jpg') no-repeat center center/contain;
-            opacity: 0;
-            z-index: 2;
-            transition: opacity 1s ease;
-        }
-
-        /* Rose animation (falling effect) */
-        .rose {
-            position: absolute;
-            top: -10%;
-            animation: fall 5s ease-in infinite;
-            pointer-events: none;
-            font-size: 20px;
-            z-index: 4;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-10%);
-            }
-            100% {
-                transform: translateY(110vh);
-            }
-        }
-
-        /* Big rose with shining effect */
-        #big-rose {
-            position: absolute;
-            right: 50px;
-            bottom: 50px;
-            font-size: 80px;
-            cursor: pointer;
-            animation: shine 1.5s infinite alternate;
-            z-index: 5;
-            display: none; /* Hidden initially */
-        }
-
-        @keyframes shine {
+        @keyframes growAndGlow {
             0% {
                 transform: scale(1);
-                filter: brightness(1);
+                text-shadow: 0 0 5px red, 0 0 10px orange, 0 0 15px yellow, 0 0 20px green, 0 0 25px cyan, 0 0 30px blue, 0 0 35px violet;
+            }
+            50% {
+                transform: scale(1.1);
+                text-shadow: 0 0 10px red, 0 0 15px orange, 0 0 25px yellow, 0 0 35px green, 0 0 45px cyan, 0 0 55px blue, 0 0 65px violet;
             }
             100% {
-                transform: scale(1.2);
-                filter: brightness(1.5);
+                transform: scale(1);
+                text-shadow: 0 0 5px red, 0 0 10px orange, 0 0 15px yellow, 0 0 20px green, 0 0 25px cyan, 0 0 30px blue, 0 0 35px violet;
             }
+        }
+
+        @keyframes rainbow {
+            0% { background-image: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet); }
+            50% { background-image: linear-gradient(90deg, violet, blue, cyan, green, yellow, orange, red); }
+            100% { background-image: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet); }
         }
     </style>
 </head>
 <body>
-    <!-- Typing container for the text -->
-    <div id="typing-container"></div>
 
-    <!-- Fool image (hidden initially) -->
-    <div id="fool-image"></div>
+    <div class="headline">CONGRATULATIONS!!!!!!</div>
+    <div class="sub-headline">You are now my Girlfriend🤭🤭</div>
 
-    <!-- Big rose with shine effect -->
-    <div id="big-rose" onclick="redirectToProposal()">🌹</div>
-
-    <script>
-        // Start the interaction immediately upon page load
-        window.onload = () => {
-            const typingContainer = document.getElementById('typing-container');
-            typingContainer.style.display = 'block';
-            let text = "Gandu ta toke flowers dilo??";
-            typeText(typingContainer, text, () => {
-                addNahButton(typingContainer);
-            });
-        };
-
-        function addNahButton(container) {
-            const button = document.createElement('button');
-            button.textContent = "Nah";
-            button.className = "no-btn";
-            button.onclick = () => {
-                button.remove();
-                typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
-                    setTimeout(() => {
-                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
-                    }, 1000);
-                });
-            };
-            container.appendChild(button);
-        }
-
-        function typeText(container, text, callback) {
-            const newLine = document.createElement('div');
-            container.appendChild(newLine);
-            let i = 0;
-            const interval = setInterval(() => {
-                if (i < text.length) {
-                    newLine.textContent += text[i];
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    if (callback) callback();
-                }
-            }, 100);
-        }
-
-        function showRoseAnimation() {
-            // Reset the background to white
-            document.body.style.background = "#fff";
-            document.getElementById('typing-container').style.color = "#272E5C"; // Adjust text color for white background
-
-            // Make the Fool.jpg image visible
-            const foolImage = document.getElementById('fool-image');
-            foolImage.style.opacity = 1; // Fade in the Fool.jpg image
-
-            // Generate falling roses
-            for (let i = 0; i < 50; i++) {
-                const rose = document.createElement('div');
-                rose.textContent = "🌹";
-                rose.className = "rose";
-                rose.style.left = Math.random() * 100 + "vw";
-                rose.style.animationDelay = Math.random() * 3 + "s";
-                rose.style.fontSize = Math.random() * 20 + 20 + "px"; // Adjusted size for visibility
-                document.body.appendChild(rose);
-
-                rose.addEventListener('animationend', () => {
-                    rose.remove();
-                });
-            }
-
-            // Show the big shining rose
-            const bigRose = document.getElementById('big-rose');
-            bigRose.style.display = 'block';
-        }
-
-        function redirectToProposal() {
-            window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
-        }
-    </script>
 </body>
 </html>

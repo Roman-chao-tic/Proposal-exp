@@ -43,33 +43,6 @@
             cursor: pointer;
         }
 
-        .message span[data-tooltip]:hover {
-            color: #ff0;
-            text-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
-        }
-
-        .message span[data-tooltip]:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            border-radius: 5px;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            z-index: 10;
-            opacity: 0;
-            animation: fade-in 0.3s forwards;
-        }
-
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .buttons {
             margin-top: 20px;
         }
@@ -117,39 +90,70 @@
             animation: hover-effect 1.5s infinite;
             width: 80%;
             max-width: 400px; 
-            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @keyframes hover-effect {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .message {
+                font-size: 1.5rem;
+                padding: 0 20px;
+            }
+
+            button {
+                font-size: 0.8rem;
+                padding: 10px 20px;
+            }
+
+            #pleading-message {
+                font-size: 1rem;
+            }
         }
 
         .glowing-tulip {
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
             animation: glow 1.5s infinite alternate;
             cursor: pointer;
         }
 
         @keyframes glow {
-            0% { text-shadow: 0 0 10px #ff00ff; }
-            100% { text-shadow: 0 0 15px #ff00ff; }
+            0% {
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
+            }
+            100% {
+                text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff, 0 0 35px #ff00ff, 0 0 45px #ff00ff;
+            }
         }
 
-        .mute-btn {
-            position: absolute;
-            top: 20px;
+        .mute-button {
+            position: fixed;
+            bottom: 20px;
             right: 20px;
-            padding: 10px 20px;
-            font-size: 0.8rem;
-            background: #000;
-            color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
             border: none;
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <audio id="background-music" loop>
+        <source src="prop1.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="container">
         <div class="message">
             Will You<span data-tooltip="Chutki">*</span> Be My<span data-tooltip="Abir">*</span> Girlfriend? Plsss🥺🥺🥺
@@ -159,14 +163,9 @@
             <button class="no-btn" onclick="handleNo()">No</button>
         </div>
     </div>
-    <div id="pleading-message">Pleaseee say yes! 😭</div>
 
-    <!-- Background music -->
-    <audio id="background-music" loop>
-        <source src="prop1.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <button class="mute-btn" id="mute-btn" onclick="toggleMute()">🔊 Mute</button>
+    <div id="pleading-message">Pleaseee say yes! 😭</div>
+    <button id="mute-btn" class="mute-button" onclick="toggleMute()">🔊 Mute</button>
 
     <script>
         let pleadingMessages = [
@@ -179,16 +178,14 @@
         let audio = document.getElementById("background-music");
         let muteBtn = document.getElementById("mute-btn");
 
-        window.onload = function () {
+        function playAudio() {
             audio.volume = 0.5;
-            let playPromise = audio.play();
+            audio.play().catch(error => console.log("Autoplay blocked. Waiting for user interaction."));
+            document.removeEventListener("click", playAudio);
+        }
 
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Autoplay blocked. User must interact first.");
-                    muteBtn.style.display = "block";
-                });
-            }
+        window.onload = function () {
+            document.addEventListener("click", playAudio);
         };
 
         function toggleMute() {
@@ -204,7 +201,7 @@
         function handleYes() {
             document.body.style.background = "url('tulip_field.jpg') no-repeat center center/cover";
             setTimeout(() => {
-                document.querySelector('.message').innerHTML = `I love you too hunnyyy<br> Mwahhhhhh 💕<span class='glowing-tulip' onclick="window.location.href='https://roman-chao-tic.github.io/Proposal-2/'">🌷</span>`;
+                document.querySelector('.message').innerHTML = `I love you too hunnyyy<br>Mwahhhhhh 💕<span class='glowing-tulip' onclick="window.location.href='https://roman-chao-tic.github.io/Proposal-2/'">🌷</span>`;
                 document.querySelector('.buttons').style.display = 'none';
                 document.getElementById('pleading-message').style.display = 'none';
             }, 500);

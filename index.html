@@ -38,6 +38,38 @@
             color: #2A562C;
         }
 
+        .message span {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .message span[data-tooltip]:hover {
+            color: #ff0;
+            text-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
+        }
+
+        .message span[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 10;
+            opacity: 0;
+            animation: fade-in 0.3s forwards;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .buttons {
             margin-top: 20px;
         }
@@ -72,42 +104,107 @@
             background: linear-gradient(to bottom, #f44336, #C62828);
             border-color: #B71C1C;
         }
+
+        #pleading-message { 
+            display: none; 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            color: #2A562C; 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+            margin-top: 20px; 
+            text-shadow: 2px 2px 4px #000; 
+            animation: hover-effect 1.5s infinite;
+            width: 80%;
+            max-width: 400px; 
+            text-align: center;
+        }
+
+        @keyframes hover-effect {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .glowing-tulip {
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            animation: glow 1.5s infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #ff00ff; }
+            100% { text-shadow: 0 0 15px #ff00ff; }
+        }
+
+        .mute-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            background: #000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <audio id="bg-music" loop autoplay>
-        <source src="https://raw.githubusercontent.com/Roman-chao-tic/Proposal-exp/main/prop1.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-
     <div class="container">
         <div class="message">
-            Will You Be My Girlfriend? Plsss🥺🥺🥺
+            Will You<span data-tooltip="Chutki">*</span> Be My<span data-tooltip="Abir">*</span> Girlfriend? Plsss🥺🥺🥺
         </div>
         <div class="buttons">
             <button class="yes-btn" onclick="handleYes()">Yes</button>
             <button class="no-btn" onclick="handleNo()">No</button>
         </div>
     </div>
-    <div id="pleading-message" style="display:none; font-size: 1.5rem; font-weight: bold; color: #2A562C; padding: 10px 20px; border-radius: 10px; margin-top: 20px; text-shadow: 2px 2px 4px #000; width: 80%; max-width: 400px; margin-left: auto; margin-right: auto;">Pleaseee say yes! 😭</div>
+    <div id="pleading-message">Pleaseee say yes! 😭</div>
+
+    <!-- Background music -->
+    <audio id="background-music" loop>
+        <source src="prop1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <button class="mute-btn" id="mute-btn" onclick="toggleMute()">🔊 Mute</button>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const audio = document.getElementById("bg-music");
-            audio.muted = true; // Mute initially to bypass autoplay restrictions
-            audio.play().then(() => {
-                audio.muted = false; // Unmute after playing starts
-            }).catch(error => {
-                console.log("Autoplay blocked: ", error);
-            });
-        });
+        let pleadingMessages = [
+            "Pleaseee say yes! I'm begging! 🙏",
+            "Amay erom bhabe na bolte parli toh?🥺",
+            "You're my sunshine, don't leave me in the rain! 🌞🌧️",
+            "Khuuuuuub dukkho dichhis amay 😭"
+        ];
+        let messageIndex = 0;
+        let audio = document.getElementById("background-music");
+        let muteBtn = document.getElementById("mute-btn");
+
+        window.onload = function () {
+            audio.volume = 0.5;
+            let playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay blocked. User must interact first.");
+                    muteBtn.style.display = "block";
+                });
+            }
+        };
+
+        function toggleMute() {
+            if (audio.muted) {
+                audio.muted = false;
+                muteBtn.textContent = "🔊 Mute";
+            } else {
+                audio.muted = true;
+                muteBtn.textContent = "🔇 Unmute";
+            }
+        }
 
         function handleYes() {
             document.body.style.background = "url('tulip_field.jpg') no-repeat center center/cover";
             setTimeout(() => {
-                document.querySelector('.message').innerHTML = `
-                I love you too hunnyyy<br>
-                Mwahhhhhh 💕🌷`;
+                document.querySelector('.message').innerHTML = `I love you too hunnyyy<br> Mwahhhhhh 💕<span class='glowing-tulip' onclick="window.location.href='https://roman-chao-tic.github.io/Proposal-2/'">🌷</span>`;
                 document.querySelector('.buttons').style.display = 'none';
                 document.getElementById('pleading-message').style.display = 'none';
             }, 500);
@@ -116,7 +213,9 @@
         function handleNo() {
             document.body.style.background = "url('depressedstorm.gif') no-repeat center center/cover";
             setTimeout(() => {
+                document.getElementById('pleading-message').innerText = pleadingMessages[messageIndex];
                 document.getElementById('pleading-message').style.display = 'block';
+                messageIndex = (messageIndex + 1) % pleadingMessages.length;
             }, 500);
         }
     </script>

@@ -43,12 +43,12 @@
         }
 
         .headline {
-            font-size: 3vw;
+            font-size: 2.5vw;
             margin-bottom: 2vh;
         }
 
         .sub-headline {
-            font-size: 2vw;
+            font-size: 1.8vw;
             margin-bottom: 3vh;
         }
 
@@ -66,8 +66,8 @@
         /* Image Reveal Effect */
         .image-container {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 400px;
+            height: 400px;
             margin-top: 40px;
             overflow: hidden;
             border-radius: 50%;
@@ -76,8 +76,8 @@
         }
 
         .image-container img {
-            width: 120%;
-            height: 120%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
@@ -94,8 +94,8 @@
                 font-size: 3vw;
             }
             .image-container {
-                width: 280px;
-                height: 280px;
+                width: 320px;
+                height: 320px;
             }
         }
     </style>
@@ -112,13 +112,14 @@
         <img src="usss.jpg" alt="Celebratory Image">
     </div>
 
-    <audio id="audio" src="prop3.mp3"></audio>
+    <audio id="audio" src="prop3.mp3" autoplay></audio>
 
     <script>
         window.onload = function() {
             setTimeout(() => {
                 document.getElementById('image-container').classList.add('reveal');
-                document.getElementById('audio').play();
+                const audio = document.getElementById('audio');
+                audio.play().catch(error => console.log("Audio playback failed: ", error));
             }, 1000); // Delays the reveal slightly for effect
         };
     </script>

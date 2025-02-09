@@ -3,165 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Proposal</title>
+    <title>Congrats</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: black;
-            color: white;
-            font-family: 'Press Start 2P', cursive;
-            overflow: hidden;
-        }
-        
-        #text-container {
-            padding: 20px;
-        }
-        
-        .typing {
-            white-space: pre-line;
-            overflow: hidden;
-            border-right: 2px solid white;
-            display: inline-block;
-            animation: blinkCursor 0.8s infinite;
-        }
-        
-        @keyframes blinkCursor {
-            50% { border-color: transparent; }
-        }
-        
-        #nah-btn {
-            background-color: red;
-            color: white;
-            font-family: 'Press Start 2P', cursive;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            margin-left: 20px;
-        }
-        
-        #nah-btn:active {
-            transform: scale(0.9);
-        }
-        
-        #image-container {
+            height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 70vh;
-            opacity: 0;
-            transition: opacity 2s ease-in;
+            text-align: center;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e); /* Gradient */
+            background-size: cover;
+            background-attachment: fixed;
+            font-family: "Courier New", Courier, monospace;
+            padding: 20px;
+            color: white; /* Ensure text visibility */
         }
-        
-        #falling-roses {
-            position: absolute;
+
+        .emoji {
+            font-size: 10vw;
+            cursor: pointer;
+            text-shadow: 0 0 10px white, 0 0 20px yellow, 0 0 30px orange;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px white, 0 0 20px yellow, 0 0 30px orange; }
+            100% { text-shadow: 0 0 20px white, 0 0 30px yellow, 0 0 40px orange; }
+        }
+
+        .text-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .headline, .sub-headline {
+            font-family: 'Press Start 2P', cursive;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+            padding: 5px;
+            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            max-width: 90%;
+            display: none;
+        }
+
+        .headline {
+            font-size: 2.5vw;
+            margin-bottom: 2vh;
+        }
+
+        .sub-headline {
+            font-size: 1.8vw;
+            margin-bottom: 3vh;
+        }
+
+        .image-container {
+            position: relative;
+            width: 500px; /* Larger size to show more of the image */
+            height: 500px;
+            margin-top: 40px;
+            overflow: hidden;
+            border-radius: 50%; /* Keeps the circular shape */
+            clip-path: circle(10%); /* Starts revealing a small part */
+            transition: clip-path 1.5s ease-in-out;
+            display: none;
+        }
+
+        .image-container img {
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            object-fit: cover;
         }
-        
-        .rose {
-            position: absolute;
-            top: -100px;
-            animation: fall 4s linear infinite;
+
+        .image-container.reveal {
+            clip-path: circle(100%); /* Fully reveals the image */
         }
-        
-        @keyframes fall {
-            from { transform: translateY(-100px); opacity: 1; }
-            to { transform: translateY(100vh); opacity: 0; }
-        }
-        
-        #final-text {
-            position: absolute;
-            bottom: 10%;
-            right: 5%;
-            text-align: right;
-        }
-        
-        .glow {
-            font-size: 30px;
-            animation: glow 1s infinite alternate;
-            cursor: pointer;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 5px red; }
-            to { text-shadow: 0 0 15px red; }
+
+        @media (max-width: 600px) {
+            .headline { font-size: 4vw; }
+            .sub-headline { font-size: 3vw; }
+            .image-container { 
+                width: 400px; /* Adjust for smaller screens */
+                height: 400px; 
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="text-container"></div>
-    <button id="nah-btn" style="display: none;">Nah</button>
-    <div id="image-container">
-        <img id="fool-img" src="Fool.jpg" alt="Fool" width="500">
-    </div>
-    <div id="falling-roses"></div>
-    <div id="final-text" style="display: none;">
-        <p>Take this rose</p>
-        <p>from your fool</p>
-        <p>&darr;</p>
-        <p class="glow" onclick="window.location.href='https://roman-chao-tic.github.io/Proposal-3/';">🌹</p>
-    </div>
-    
-    <audio id="prop2" loop>
-        <source src="prop2.mp3" type="audio/mp3">
-    </audio>
-    
-    <script>
-        const textContainer = document.getElementById('text-container');
-        const nahBtn = document.getElementById('nah-btn');
-        const imageContainer = document.getElementById('image-container');
-        const finalText = document.getElementById('final-text');
-        const audio = document.getElementById('prop2');
 
-        function typeText(text, speed = 100) {
-            return new Promise(resolve => {
-                let i = 0;
-                const interval = setInterval(() => {
-                    textContainer.innerHTML = `<span class='typing'>${text.slice(0, i)}</span>`;
-                    i++;
-                    if (i > text.length) {
-                        clearInterval(interval);
-                        textContainer.innerHTML = text;
-                        resolve();
-                    }
-                }, speed);
-            });
-        }
-        
-        async function startSequence() {
-            await typeText("Gandu ta toke flowers dilo??", 100);
-            nahBtn.style.display = 'inline-block';
-        }
-        
-        nahBtn.addEventListener('click', async () => {
-            nahBtn.style.display = 'none';
-            await typeText("Jantammm!!!!!! What a f*cking incompetent.", 100);
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Delay before next text
-            await typeText("Well, anyways ei ne phul from your fool", 100);
+    <div class="emoji" id="emoji">💍</div>
+
+    <div class="text-container" id="text-container">
+        <div class="headline" id="headline">CONGRATULATIONS!</div>
+        <div class="sub-headline" id="sub-headline">You are now my Girlfriend 🤭</div>
+    </div>
+
+    <div class="image-container" id="image-container">
+        <img src="usss.jpg" alt="Celebratory Image">
+    </div>
+
+    <audio id="audio" src="prop3.mp3" preload="auto"></audio>
+
+    <script>
+        document.getElementById('emoji').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.getElementById('text-container').style.display = 'flex';
+            
             setTimeout(() => {
-                imageContainer.style.opacity = 1;
-                finalText.style.display = 'block';
-                audio.play();
-                startFallingRoses();
-            }, 2000);
+                document.getElementById('headline').style.display = 'block';
+            }, 500);
+            
+            setTimeout(() => {
+                document.getElementById('sub-headline').style.display = 'block';
+            }, 1000);
+            
+            setTimeout(() => {
+                document.getElementById('image-container').style.display = 'block';
+                document.getElementById('image-container').classList.add('reveal');
+                const audio = document.getElementById('audio');
+                audio.play().catch(error => console.log("Audio playback failed: ", error));
+            }, 1500);
         });
-        
-        function startFallingRoses() {
-            for (let i = 0; i < 20; i++) {
-                let rose = document.createElement('div');
-                rose.innerHTML = '🌹';
-                rose.classList.add('rose');
-                rose.style.left = Math.random() * window.innerWidth + 'px';
-                rose.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                document.getElementById('falling-roses').appendChild(rose);
-                setTimeout(() => rose.remove(), 5000);
-            }
-            setTimeout(startFallingRoses, 1000);
-        }
-        
-        startSequence();
     </script>
+
 </body>
 </html>

@@ -6,14 +6,9 @@
     <title>Interactive Tulip Animation</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
             font-family: 'Press Start 2P', cursive;
             background: #000;
             color: #fff;
@@ -22,62 +17,16 @@
         }
 
         #typing-container {
-            margin: 50px auto;
-            max-width: 90%;
+            position: relative;
+            z-index: 3;
+            top: 50px;
+            margin: 0 auto;
             font-size: 1rem;
             padding: 20px;
-        }
-
-        #fool-image {
-            width: 80%;
-            max-width: 400px;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            margin: 20px auto;
-            display: block;
-        }
-
-        .rose {
-            position: absolute;
-            top: -10%;
-            font-size: 20px;
-            pointer-events: none;
-            animation: fall 5s ease-in infinite;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh); }
-        }
-
-        #big-rose {
-            position: absolute;
-            bottom: 50px;
-            right: 50px;
-            font-size: 80px;
-            cursor: pointer;
-            display: none;
-            animation: rainbow-glow 1.5s infinite alternate;
-        }
-
-        @keyframes rainbow-glow {
-            0%, 100% { filter: drop-shadow(0 0 5px red); }
-            20% { filter: drop-shadow(0 0 5px orange); }
-            40% { filter: drop-shadow(0 0 5px yellow); }
-            60% { filter: drop-shadow(0 0 5px green); }
-            80% { filter: drop-shadow(0 0 5px blue); }
-        }
-
-        #rose-text, #text-arrow {
-            position: absolute;
-            display: none;
-            right: 50px;
-            font-size: 1.2rem;
-        }
-
-        #text-arrow {
-            bottom: 170px;
-            font-size: 50px;
-            color: #FF69B4;
+            color: #fff;
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden;
         }
 
         .no-btn {
@@ -87,125 +36,108 @@
             border: 2px solid #c0392b;
             background-color: #e74c3c;
             color: #fff;
-            margin-top: 20px;
+            margin-top: 40px;
             border-radius: 5px;
-            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease-in-out;
+            opacity: 1;
         }
 
-        .no-btn:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
+        .no-btn.fade-out {
+            opacity: 0;
+            transform: scale(0.8);
         }
 
-        #unmute-btn {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: 0.2s ease-in-out;
-            z-index: 10;
+        .rose {
+            position: absolute;
+            top: -10%;
+            animation: fall 5s ease-in infinite;
+            pointer-events: none;
+            font-size: 20px;
+            z-index: 4;
         }
 
-        #unmute-btn:hover {
-            background: #2980b9;
+        @keyframes fall {
+            0% { transform: translateY(-10%); }
+            100% { transform: translateY(110vh); }
+        }
+
+        @media (max-width: 600px) {
+            #typing-container {
+                font-size: 0.8rem;
+            }
+            .no-btn {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div id="typing-container"></div>
-    <img id="fool-image" src="Fool.jpg" alt="Fool Image">
-    <div id="rose-text">Take this rose<br>from your fool</div>
-    <div id="text-arrow">⬇</div>
-    <div id="big-rose" onclick="redirectToProposal()">🌹</div>
-
-    <button id="unmute-btn" onclick="toggleAudio()">🔇 Unmute</button>
-
-    <audio id="background-audio" loop>
-        <source src="prop2.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        let audioPlaying = false;
-
         window.onload = () => {
-            typeText("Gandu ta toke flowers dilo??", () => addNahButton());
+            const typingContainer = document.getElementById('typing-container');
+            let text = "Gandu ta toke flowers dilo??";
+            typeText(typingContainer, text, () => {
+                addNahButton(typingContainer);
+            });
         };
 
-        function addNahButton() {
-            const container = document.getElementById('typing-container');
+        function addNahButton(container) {
             const button = document.createElement('button');
             button.textContent = "Nah";
             button.className = "no-btn";
             button.onclick = () => {
-                button.remove();
-                typeText("Jantammm!!!!!! What a f*cking incompetent😔", showFoolImage);
+                button.classList.add("fade-out");
+                setTimeout(() => button.remove(), 500);
+                typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
+                    setTimeout(() => {
+                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
+                    }, 1000);
+                });
             };
             container.appendChild(button);
         }
 
-        function typeText(text, callback) {
-            const container = document.getElementById('typing-container');
+        function typeText(container, text, callback) {
             const newLine = document.createElement('div');
             container.appendChild(newLine);
             let i = 0;
             const interval = setInterval(() => {
-                newLine.textContent += text[i++] || "";
-                if (i === text.length) {
+                if (i < text.length) {
+                    newLine.textContent += text[i];
+                    i++;
+                } else {
                     clearInterval(interval);
                     if (callback) callback();
                 }
-            }, 50);
-        }
-
-        function showFoolImage() {
-            document.getElementById('fool-image').style.opacity = 1;
-            setTimeout(() => typeText("Well, anyways ei ne phul from your fool", showRoseAnimation), 2000);
+            }, 100);
         }
 
         function showRoseAnimation() {
             document.body.style.background = "#fff";
             document.getElementById('typing-container').style.color = "#272E5C";
-
-            const audio = document.getElementById('background-audio');
-            let volume = 0;
-            audio.volume = volume;
-            if (audioPlaying) audio.play();
             
-            let fadeIn = setInterval(() => {
-                if ((volume += 0.1) < 1) audio.volume = volume;
-                else clearInterval(fadeIn);
-            }, 200);
-
-            for (let i = 0; i < 30; i++) {
+            let roseCount = 0;
+            let maxRoses = 50;
+            let interval = setInterval(() => {
+                if (roseCount >= maxRoses) {
+                    clearInterval(interval);
+                    return;
+                }
                 const rose = document.createElement('div');
                 rose.textContent = "🌹";
                 rose.className = "rose";
                 rose.style.left = Math.random() * 100 + "vw";
-                rose.style.animationDelay = Math.random() * 3 + "s";
+                rose.style.animationDuration = (Math.random() * 3 + 3) + "s";
                 rose.style.fontSize = Math.random() * 20 + 20 + "px";
                 document.body.appendChild(rose);
-                rose.addEventListener('animationend', () => rose.remove());
-            }
-
-            ["big-rose", "rose-text", "text-arrow"].forEach(id => document.getElementById(id).style.display = 'block');
-        }
-
-        function toggleAudio() {
-            const audio = document.getElementById('background-audio');
-            const unmuteBtn = document.getElementById('unmute-btn');
-            audioPlaying = !audioPlaying;
-            audioPlaying ? audio.play() : audio.pause();
-            unmuteBtn.textContent = audioPlaying ? "🔊 Mute" : "🔇 Unmute";
-        }
-
-        function redirectToProposal() {
-            window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
+                rose.addEventListener('animationend', () => {
+                    rose.remove();
+                });
+                roseCount++;
+            }, 100);
         }
     </script>
 </body>

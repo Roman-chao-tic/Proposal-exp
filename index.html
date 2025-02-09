@@ -38,6 +38,37 @@
             color: #2A562C;
         }
 
+        .message span[data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .message span[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 10;
+            opacity: 0;
+            animation: fade-in 0.3s forwards;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
         .buttons {
             margin-top: 20px;
         }
@@ -87,12 +118,6 @@
             max-width: 400px;
         }
 
-        .glowing-tulip {
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
-            animation: glow 1.5s infinite alternate;
-            cursor: pointer;
-        }
-
         .unmute-btn {
             position: absolute;
             bottom: 20px;
@@ -124,15 +149,6 @@
             }
         }
 
-        @keyframes glow {
-            0% {
-                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
-            }
-            100% {
-                text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff, 0 0 35px #ff00ff, 0 0 45px #ff00ff;
-            }
-        }
-
         @media (max-width: 600px) {
             .message {
                 font-size: 1.5rem;
@@ -160,29 +176,25 @@
         </div>
     </div>
     <div id="pleading-message">Pleaseee say yes! 😭</div>
-    <button class="unmute-btn" id="unmute-btn" onclick="unmuteAudio()">Unmute</button>
+    <button class="unmute-btn" id="unmute-btn" onclick="toggleAudio()">Unmute</button>
 
-    <audio id="background-audio" src="prop1.mp3" preload="auto"></audio>
+    <audio id="background-audio" src="prop1.mp3" preload="auto" loop></audio>
 
     <script>
-        const preloadImages = ['sunset.gif', 'tulip_field.jpg', 'depressedstorm.gif'];
-        preloadImages.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-
         const audio = document.getElementById('background-audio');
-        const pleadingMessages = [
-            "Pleaseee say yes! I'm begging! 🙏",
-            "Amay erom bhabe na bolte parli toh?🥺",
-            "You're my sunshine, don't leave me in the rain! 🌞🌧️",
-            "Khuuuuuub dukkho dichhis amay 😭"
-        ];
-        let messageIndex = 0;
+        const unmuteBtn = document.getElementById('unmute-btn');
 
-        function unmuteAudio() {
-            audio.play();
-            document.getElementById('unmute-btn').style.display = 'none';
+        let audioPlaying = false;
+
+        function toggleAudio() {
+            if (audioPlaying) {
+                audio.pause();
+                unmuteBtn.textContent = 'Unmute';
+            } else {
+                audio.play();
+                unmuteBtn.textContent = 'Mute';
+            }
+            audioPlaying = !audioPlaying;
         }
 
         function handleYes() {
@@ -198,11 +210,18 @@
 
         function handleNo() {
             document.body.style.background = "url('depressedstorm.gif') no-repeat center center/cover";
+            const messages = [
+                "Pleaseee say yes! I'm begging! 🙏",
+                "Amay erom bhabe na bolte parli toh?🥺",
+                "You're my sunshine, don't leave me in the rain! 🌞🌧️",
+                "Khuuuuuub dukkho dichhis amay 😭"
+            ];
+            let currentMessageIndex = 0;
+
             setTimeout(() => {
-                const message = pleadingMessages[messageIndex];
-                document.getElementById('pleading-message').innerText = message;
+                document.getElementById('pleading-message').innerText = messages[currentMessageIndex];
                 document.getElementById('pleading-message').style.display = 'block';
-                messageIndex = (messageIndex + 1) % pleadingMessages.length;
+                currentMessageIndex = (currentMessageIndex + 1) % messages.length;
             }, 500);
         }
     </script>

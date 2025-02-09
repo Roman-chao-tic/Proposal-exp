@@ -23,53 +23,48 @@
             padding: 20px;
         }
 
-        .text-container {
-            padding: 10px;
+        .emoji {
+            font-size: 10vw;
+            cursor: pointer;
+            text-shadow: 0 0 10px white, 0 0 20px yellow, 0 0 30px orange;
+            animation: glow 1.5s infinite alternate;
         }
 
-        .headline {
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px white, 0 0 20px yellow, 0 0 30px orange; }
+            100% { text-shadow: 0 0 20px white, 0 0 30px yellow, 0 0 40px orange; }
+        }
+
+        .text-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .headline, .sub-headline {
             font-family: 'Press Start 2P', cursive;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: white;
-            text-shadow: 0 0 3px red, 0 0 6px orange, 0 0 9px yellow, 
-                         0 0 12px green, 0 0 15px cyan, 0 0 18px blue, 0 0 21px violet;
-            animation: rainbowGlow 2s infinite alternate;
             padding: 5px;
             backdrop-filter: blur(5px);
             background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             max-width: 90%;
+            display: none;
+        }
+
+        .headline {
             font-size: 2.5vw;
             margin-bottom: 2vh;
         }
 
         .sub-headline {
-            font-family: 'Press Start 2P', cursive;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: white;
-            padding: 5px;
-            backdrop-filter: blur(5px);
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            max-width: 90%;
             font-size: 1.8vw;
             margin-bottom: 3vh;
         }
 
-        @keyframes rainbowGlow {
-            0% {
-                text-shadow: 0 0 3px red, 0 0 6px orange, 0 0 9px yellow, 
-                             0 0 12px green, 0 0 15px cyan, 0 0 18px blue, 0 0 21px violet;
-            }
-            100% {
-                text-shadow: 0 0 9px violet, 0 0 12px blue, 0 0 15px cyan, 
-                             0 0 18px green, 0 0 21px yellow, 0 0 24px orange, 0 0 27px red;
-            }
-        }
-
-        /* Image Reveal Effect */
         .image-container {
             position: relative;
             width: 400px;
@@ -79,6 +74,7 @@
             border-radius: 50%;
             clip-path: circle(0%);
             transition: clip-path 1.5s ease-in-out;
+            display: none;
         }
 
         .image-container img {
@@ -91,27 +87,21 @@
             clip-path: circle(100%);
         }
 
-        /* Mobile Optimization */
         @media (max-width: 600px) {
-            .headline {
-                font-size: 4vw;
-            }
-            .sub-headline {
-                font-size: 3vw;
-            }
-            .image-container {
-                width: 320px;
-                height: 320px;
-            }
+            .headline { font-size: 4vw; }
+            .sub-headline { font-size: 3vw; }
+            .image-container { width: 320px; height: 320px; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="text-container">
-        <div class="headline">CONGRATULATIONS!</div>
-        <div class="sub-headline">You are now my Girlfriend 🤭</div>
+    <div class="emoji" id="emoji">💍</div>
+
+    <div class="text-container" id="text-container">
+        <div class="headline" id="headline">CONGRATULATIONS!</div>
+        <div class="sub-headline" id="sub-headline">You are now my Girlfriend 🤭</div>
     </div>
 
     <div class="image-container" id="image-container">
@@ -121,13 +111,25 @@
     <audio id="audio" src="prop3.mp3" preload="auto"></audio>
 
     <script>
-        window.onload = function() {
+        document.getElementById('emoji').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.getElementById('text-container').style.display = 'flex';
+            
             setTimeout(() => {
+                document.getElementById('headline').style.display = 'block';
+            }, 500);
+            
+            setTimeout(() => {
+                document.getElementById('sub-headline').style.display = 'block';
+            }, 1000);
+            
+            setTimeout(() => {
+                document.getElementById('image-container').style.display = 'block';
                 document.getElementById('image-container').classList.add('reveal');
                 const audio = document.getElementById('audio');
                 audio.play().catch(error => console.log("Audio playback failed: ", error));
-            }, 1000); // Delays the reveal slightly for effect
-        };
+            }, 1500);
+        });
     </script>
 
 </body>

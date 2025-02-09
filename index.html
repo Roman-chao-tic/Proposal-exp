@@ -43,11 +43,16 @@
             cursor: pointer;
         }
 
+        .message span[data-tooltip]:hover {
+            color: #ffd700; /* Golden glow */
+            text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700;
+        }
+
         .message span[data-tooltip]:hover::after {
             content: attr(data-tooltip);
             position: absolute;
             background: rgba(0, 0, 0, 0.8);
-            color: #fff;
+            color: #ffd700; /* Golden tooltip text */
             font-size: 0.8rem;
             padding: 5px 10px;
             border-radius: 5px;
@@ -183,7 +188,14 @@
     <script>
         const audio = document.getElementById('background-audio');
         const unmuteBtn = document.getElementById('unmute-btn');
-
+        const pleadingMessage = document.getElementById('pleading-message');
+        const messages = [
+            "Pleaseee say yes! I'm begging! 🙏",
+            "Amay erom bhabe na bolte parli toh?🥺",
+            "You're my sunshine, don't leave me in the rain! 🌞🌧️",
+            "Khuuuuuub dukkho dichhis amay 😭"
+        ];
+        let currentMessageIndex = 0;
         let audioPlaying = false;
 
         function toggleAudio() {
@@ -204,23 +216,15 @@
                     I love you too hunnyyy<br>
                     Mwahhhhhh 💕<span class='glowing-tulip' onclick="window.location.href='https://roman-chao-tic.github.io/Proposal-2/'">🌷</span>`;
                 document.querySelector('.buttons').style.display = 'none';
-                document.getElementById('pleading-message').style.display = 'none';
+                pleadingMessage.style.display = 'none';
             }, 500);
         }
 
         function handleNo() {
             document.body.style.background = "url('depressedstorm.gif') no-repeat center center/cover";
-            const messages = [
-                "Pleaseee say yes! I'm begging! 🙏",
-                "Amay erom bhabe na bolte parli toh?🥺",
-                "You're my sunshine, don't leave me in the rain! 🌞🌧️",
-                "Khuuuuuub dukkho dichhis amay 😭"
-            ];
-            let currentMessageIndex = 0;
-
             setTimeout(() => {
-                document.getElementById('pleading-message').innerText = messages[currentMessageIndex];
-                document.getElementById('pleading-message').style.display = 'block';
+                pleadingMessage.innerText = messages[currentMessageIndex];
+                pleadingMessage.style.display = 'block';
                 currentMessageIndex = (currentMessageIndex + 1) % messages.length;
             }, 500);
         }

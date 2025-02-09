@@ -3,173 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Tulip Animation</title>
+    <title>Fool's Proposal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         body {
-            margin: 0;
-            padding: 0;
+            background-color: black;
+            color: white;
             font-family: 'Press Start 2P', cursive;
-            background: #000;
-            color: #fff;
             overflow: hidden;
-            text-align: center;
-        }
-
-        #typing-container {
-            position: relative;
-            font-size: 1rem;
+            text-align: left;
             padding: 20px;
-            color: #fff;
-            width: auto;
-            max-width: 90%;
-            margin: 20px auto;
         }
-
-        #fool-image {
-            position: relative;
-            width: 300px;
-            height: auto;
-            background: url('Fool.jpg') no-repeat center center/contain;
-            margin: 20px auto;
-            opacity: 0;
-            transition: opacity 1s ease;
+        .text-container {
+            white-space: pre-line;
         }
-
-        .rose {
-            position: absolute;
-            top: -10%;
-            animation: fall 5s ease-in infinite;
-            pointer-events: none;
-            font-size: 20px;
-            z-index: 4;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-10%); }
-            100% { transform: translateY(110vh); }
-        }
-
-        #big-rose-container {
-            position: absolute;
-            top: 50%;
-            right: 20%;
-            transform: translateY(-50%);
-            text-align: center;
+        .button {
             display: none;
-        }
-
-        #rose-text {
-            color: #000;
-            font-size: 1.2rem;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            display: block;
-        }
-
-        #text-arrow {
-            font-size: 50px;
-            color: #000;
-            display: block;
-        }
-
-        #big-rose {
-            font-size: 80px;
+            background-color: red;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
             cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .button:active {
+            transform: scale(0.9);
+        }
+        .image-container {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+        }
+        img {
+            width: 300px;
+            opacity: 0;
+            transition: opacity 2s ease-in;
+        }
+        .falling-roses {
+            position: absolute;
+            top: 0;
+            color: red;
+            font-size: 20px;
+            pointer-events: none;
+        }
+        .glowing-emoji {
+            font-size: 40px;
             display: block;
-            animation: rainbow-glow 1.5s infinite alternate;
-        }
-
-        @keyframes rainbow-glow {
-            0% { filter: drop-shadow(0 0 5px red); }
-            20% { filter: drop-shadow(0 0 5px orange); }
-            40% { filter: drop-shadow(0 0 5px yellow); }
-            60% { filter: drop-shadow(0 0 5px green); }
-            80% { filter: drop-shadow(0 0 5px blue); }
-            100% { filter: drop-shadow(0 0 5px violet); }
-        }
-
-        .no-btn {
-            padding: 12px 24px;
-            font-size: 18px;
+            animation: glow 1s infinite alternate;
             cursor: pointer;
-            border: 2px solid #c0392b;
-            background-color: #e74c3c;
-            color: #fff;
-            margin-top: 40px;
-            border-radius: 5px;
-            transition: all 0.2s ease-in-out;
         }
-
-        .no-btn:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
+        @keyframes glow {
+            from { text-shadow: 0 0 5px red; }
+            to { text-shadow: 0 0 20px red; }
         }
     </style>
 </head>
 <body>
-    <div id="typing-container"></div>
-    <div id="fool-image"></div>
-    <div id="big-rose-container">
-        <div id="rose-text">Take this rose<br>from your fool</div>
-        <div id="text-arrow">⬇</div>
-        <div id="big-rose" onclick="redirectToProposal()">🌹</div>
+    <div class="text-container" id="text"></div>
+    <button class="button" id="nahButton">Nah</button>
+    <div class="image-container" id="imageContainer">
+        <p>Take this rose</p>
+        <p>from your fool</p>
+        <p>&darr;</p>
+        <span class="glowing-emoji" id="rose">🌹</span>
+        <br>
+        <img src="Fool.jpg" id="foolImage">
     </div>
-    <audio id="background-audio" loop>
-        <source src="prop2.mp3" type="audio/mpeg">
-    </audio>
-
+    <audio id="audio" src="prop2.mp3"></audio>
     <script>
-        window.onload = () => {
-            const typingContainer = document.getElementById('typing-container');
-            typingContainer.style.display = 'block';
-            let text = "Gandu ta toke flowers dilo??";
-            typeText(typingContainer, text, () => {
-                addNahButton(typingContainer);
-            });
-        };
+        const textArray = [
+            "Gandu ta toke flowers dilo??",
+            "Jantammm!!!!!! What a f*cking incompetent",
+            "Well, anyways ei ne phul from your fool"
+        ];
+        const textContainer = document.getElementById("text");
+        const button = document.getElementById("nahButton");
+        const imageContainer = document.getElementById("imageContainer");
+        const rose = document.getElementById("rose");
+        const audio = document.getElementById("audio");
+        let index = 0;
 
-        function addNahButton(container) {
-            const button = document.createElement('button');
-            button.textContent = "Nah";
-            button.className = "no-btn";
-            button.onclick = () => {
-                button.remove();
-                typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
-                    setTimeout(() => {
-                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
-                    }, 1000);
-                });
-            };
-            container.appendChild(button);
-        }
-
-        function typeText(container, text, callback) {
-            const newLine = document.createElement('div');
-            container.appendChild(newLine);
+        function typeText(text, callback) {
             let i = 0;
-            const interval = setInterval(() => {
+            function typing() {
                 if (i < text.length) {
-                    newLine.textContent += text[i];
+                    textContainer.innerHTML += text[i];
                     i++;
+                    setTimeout(typing, 100);
                 } else {
-                    clearInterval(interval);
                     if (callback) callback();
                 }
-            }, 100);
+            }
+            typing();
+        }
+        
+        typeText(textArray[0], () => {
+            button.style.display = "inline-block";
+button.style.marginLeft = "20px";
+        });
+        
+        button.addEventListener("click", () => {
+            button.style.display = "none";
+            textContainer.innerHTML += "\n";
+            typeText(textArray[1], () => {
+                textContainer.innerHTML += "\n";
+                typeText(textArray[2], () => {
+                    document.getElementById("foolImage").style.transition = "opacity 4s ease-in";
+document.getElementById("foolImage").style.opacity = "1";
+document.getElementById("foolImage").style.width = "500px";
+                    imageContainer.style.display = "block";
+imageContainer.style.position = "absolute";
+imageContainer.style.right = "20px";
+imageContainer.style.bottom = "20px";
+                    createFallingRoses();
+                    audio.volume = 0;
+                    audio.loop = true;
+audio.play();
+                    fadeInAudio(audio);
+                });
+            });
+        });
+
+        function createFallingRoses() {
+            for (let i = 0; i < 20; i++) {
+                let rose = document.createElement("div");
+                rose.className = "falling-roses";
+                rose.innerHTML = "🌹";
+                rose.style.left = Math.random() * window.innerWidth + "px";
+                document.body.appendChild(rose);
+                let duration = Math.random() * 5 + 3;
+                rose.animate([
+                    { transform: `translateY(-50px)`, opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    iterations: Infinity
+                });
+            }
         }
 
-        function showRoseAnimation() {
-            document.body.style.background = "#fff";
-            document.getElementById('typing-container').style.color = "#272E5C";
-            document.getElementById('fool-image').style.opacity = 1;
-            document.getElementById('big-rose-container').style.display = 'block';
+        function fadeInAudio(audio) {
+            let volume = 0;
+            let interval = setInterval(() => {
+                if (volume < 1) {
+                    volume += 0.05;
+                    audio.volume = volume;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 200);
         }
-
-        function redirectToProposal() {
+        
+        rose.addEventListener("click", () => {
             window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
-        }
+        });
     </script>
 </body>
 </html>

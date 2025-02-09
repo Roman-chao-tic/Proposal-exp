@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Congrats</title>
+    <title>Interactive Tulip Animation</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,125 +14,199 @@
         }
 
         body {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
             text-align: center;
-            background-color: black;
-            font-family: "Courier New", Courier, monospace;
+        }
+
+        #typing-container {
+            margin: 50px auto;
+            max-width: 90%;
+            font-size: 1rem;
             padding: 20px;
         }
 
-        .emoji {
-            font-size: 10vw;
+        #fool-image {
+            width: 80%;
+            max-width: 400px;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .rose {
+            position: absolute;
+            top: -10%;
+            font-size: 20px;
+            pointer-events: none;
+            animation: fall 5s ease-in infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh); }
+        }
+
+        #big-rose {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            font-size: 80px;
             cursor: pointer;
-            text-shadow: 0 0 10px white, 0 0 20px yellow, 0 0 30px orange;
-            animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px white, 0 0 20px yellow, 0 0 30px orange; }
-            100% { text-shadow: 0 0 20px white, 0 0 30px yellow, 0 0 40px orange; }
-        }
-
-        .text-container {
             display: none;
-            flex-direction: column;
-            align-items: center;
+            animation: rainbow-glow 1.5s infinite alternate;
+        }
+
+        @keyframes rainbow-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px red); }
+            20% { filter: drop-shadow(0 0 5px orange); }
+            40% { filter: drop-shadow(0 0 5px yellow); }
+            60% { filter: drop-shadow(0 0 5px green); }
+            80% { filter: drop-shadow(0 0 5px blue); }
+        }
+
+        #rose-text, #text-arrow {
+            position: absolute;
+            display: none;
+            right: 50px;
+            font-size: 1.2rem;
+        }
+
+        #text-arrow {
+            bottom: 170px;
+            font-size: 50px;
+            color: #FF69B4;
+        }
+
+        .no-btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border: 2px solid #c0392b;
+            background-color: #e74c3c;
+            color: #fff;
             margin-top: 20px;
+            border-radius: 5px;
+            transition: all 0.2s ease-in-out;
         }
 
-        .headline, .sub-headline {
-            font-family: 'Press Start 2P', cursive;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .no-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        #unmute-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #3498db;
             color: white;
-            padding: 5px;
-            backdrop-filter: blur(5px);
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            max-width: 90%;
-            display: none;
+            border: none;
+            border-radius: 5px;
+            transition: 0.2s ease-in-out;
+            z-index: 10;
         }
 
-        .headline {
-            font-size: 2.5vw;
-            margin-bottom: 2vh;
-        }
-
-        .sub-headline {
-            font-size: 1.8vw;
-            margin-bottom: 3vh;
-        }
-
-        .image-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            margin-top: 40px;
-            overflow: hidden;
-            border-radius: 50%;
-            clip-path: circle(0%);
-            transition: clip-path 1.5s ease-in-out;
-            display: none;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .reveal {
-            clip-path: circle(100%);
-        }
-
-        @media (max-width: 600px) {
-            .headline { font-size: 4vw; }
-            .sub-headline { font-size: 3vw; }
-            .image-container { width: 320px; height: 320px; }
+        #unmute-btn:hover {
+            background: #2980b9;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="typing-container"></div>
+    <img id="fool-image" src="Fool.jpg" alt="Fool Image">
+    <div id="rose-text">Take this rose<br>from your fool</div>
+    <div id="text-arrow">⬇</div>
+    <div id="big-rose" onclick="redirectToProposal()">🌹</div>
 
-    <div class="emoji" id="emoji">💍</div>
+    <button id="unmute-btn" onclick="toggleAudio()">🔇 Unmute</button>
 
-    <div class="text-container" id="text-container">
-        <div class="headline" id="headline">CONGRATULATIONS!</div>
-        <div class="sub-headline" id="sub-headline">You are now my Girlfriend 🤭</div>
-    </div>
-
-    <div class="image-container" id="image-container">
-        <img src="usss.jpg" alt="Celebratory Image">
-    </div>
-
-    <audio id="audio" src="prop3.mp3" preload="auto"></audio>
+    <audio id="background-audio" loop>
+        <source src="prop2.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        document.getElementById('emoji').addEventListener('click', function() {
-            this.style.display = 'none';
-            document.getElementById('text-container').style.display = 'flex';
-            
-            setTimeout(() => {
-                document.getElementById('headline').style.display = 'block';
-            }, 500);
-            
-            setTimeout(() => {
-                document.getElementById('sub-headline').style.display = 'block';
-            }, 1000);
-            
-            setTimeout(() => {
-                document.getElementById('image-container').style.display = 'block';
-                document.getElementById('image-container').classList.add('reveal');
-                const audio = document.getElementById('audio');
-                audio.play().catch(error => console.log("Audio playback failed: ", error));
-            }, 1500);
-        });
-    </script>
+        let audioPlaying = false;
 
+        window.onload = () => {
+            typeText("Gandu ta toke flowers dilo??", () => addNahButton());
+        };
+
+        function addNahButton() {
+            const container = document.getElementById('typing-container');
+            const button = document.createElement('button');
+            button.textContent = "Nah";
+            button.className = "no-btn";
+            button.onclick = () => {
+                button.remove();
+                typeText("Jantammm!!!!!! What a f*cking incompetent😔", showFoolImage);
+            };
+            container.appendChild(button);
+        }
+
+        function typeText(text, callback) {
+            const container = document.getElementById('typing-container');
+            const newLine = document.createElement('div');
+            container.appendChild(newLine);
+            let i = 0;
+            const interval = setInterval(() => {
+                newLine.textContent += text[i++] || "";
+                if (i === text.length) {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 50);
+        }
+
+        function showFoolImage() {
+            document.getElementById('fool-image').style.opacity = 1;
+            setTimeout(() => typeText("Well, anyways ei ne phul from your fool", showRoseAnimation), 2000);
+        }
+
+        function showRoseAnimation() {
+            document.body.style.background = "#fff";
+            document.getElementById('typing-container').style.color = "#272E5C";
+
+            const audio = document.getElementById('background-audio');
+            let volume = 0;
+            audio.volume = volume;
+            if (audioPlaying) audio.play();
+            
+            let fadeIn = setInterval(() => {
+                if ((volume += 0.1) < 1) audio.volume = volume;
+                else clearInterval(fadeIn);
+            }, 200);
+
+            for (let i = 0; i < 30; i++) {
+                const rose = document.createElement('div');
+                rose.textContent = "🌹";
+                rose.className = "rose";
+                rose.style.left = Math.random() * 100 + "vw";
+                rose.style.animationDelay = Math.random() * 3 + "s";
+                rose.style.fontSize = Math.random() * 20 + 20 + "px";
+                document.body.appendChild(rose);
+                rose.addEventListener('animationend', () => rose.remove());
+            }
+
+            ["big-rose", "rose-text", "text-arrow"].forEach(id => document.getElementById(id).style.display = 'block');
+        }
+
+        function toggleAudio() {
+            const audio = document.getElementById('background-audio');
+            const unmuteBtn = document.getElementById('unmute-btn');
+            audioPlaying = !audioPlaying;
+            audioPlaying ? audio.play() : audio.pause();
+            unmuteBtn.textContent = audioPlaying ? "🔊 Mute" : "🔇 Unmute";
+        }
+
+        function redirectToProposal() {
+            window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
+        }
+    </script>
 </body>
 </html>

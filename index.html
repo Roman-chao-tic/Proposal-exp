@@ -10,12 +10,10 @@
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
-            background: #000; /* Set initial background to black */
+            background: #000;
             color: #fff;
             overflow: hidden;
         }
-
-        /* Typing container for the text */
         #typing-container {
             position: relative;
             z-index: 3;
@@ -29,8 +27,6 @@
             max-width: 90%;
             overflow: hidden;
         }
-
-        /* Fool image container */
         #fool-image {
             position: absolute;
             top: 0;
@@ -42,8 +38,6 @@
             z-index: 2;
             transition: opacity 1s ease;
         }
-
-        /* Rose animation (falling effect) */
         .rose {
             position: absolute;
             top: -10%;
@@ -52,30 +46,20 @@
             font-size: 20px;
             z-index: 4;
         }
-
         @keyframes fall {
-            0% {
-                transform: translateY(-10%);
-            }
-            100% {
-                transform: translateY(110vh);
-            }
+            0% { transform: translateY(-10%); }
+            100% { transform: translateY(110vh); }
         }
-
-        /* Big rose with rainbow glow */
         #big-rose {
             position: absolute;
             right: 50px;
             bottom: 50px;
             font-size: 80px;
             cursor: pointer;
-            image-rendering: pixelated;
             z-index: 5;
             display: none;
             animation: rainbow-glow 1.5s infinite alternate;
         }
-
-        /* Rainbow glow animation */
         @keyframes rainbow-glow {
             0% { filter: drop-shadow(0 0 5px red); }
             20% { filter: drop-shadow(0 0 5px orange); }
@@ -84,8 +68,6 @@
             80% { filter: drop-shadow(0 0 5px blue); }
             100% { filter: drop-shadow(0 0 5px violet); }
         }
-
-        /* Text above the big rose */
         #rose-text {
             position: absolute;
             right: 50px;
@@ -97,8 +79,6 @@
             z-index: 5;
             line-height: 1.5;
         }
-
-        /* Arrow pointing to the rose */
         #text-arrow {
             position: absolute;
             right: 85px;
@@ -108,8 +88,6 @@
             display: none;
             z-index: 5;
         }
-
-        /* Nah button */
         .no-btn {
             padding: 12px 24px;
             font-size: 18px;
@@ -122,7 +100,6 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             transition: all 0.2s ease-in-out;
         }
-
         .no-btn:hover {
             background-color: #c0392b;
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
@@ -131,27 +108,15 @@
     </style>
 </head>
 <body>
-    <!-- Typing container for the text -->
     <div id="typing-container"></div>
-
-    <!-- Fool image (hidden initially) -->
     <div id="fool-image"></div>
-
-    <!-- Text above the big rose -->
-    <div id="rose-text">
-        Take this rose<br>
-        from your fool
-    </div>
-
-    <!-- Arrow pointing to the rose -->
+    <div id="rose-text">Take this rose<br>from your fool</div>
     <div id="text-arrow">⬇</div>
-
-    <!-- Big rose with rainbow effect -->
     <div id="big-rose" onclick="redirectToProposal()">🌹</div>
 
-    <!-- Audio element (hidden) -->
     <audio id="background-audio" loop>
         <source src="prop2.mp3" type="audio/mpeg">
+        <source src="prop2.ogg" type="audio/ogg">
     </audio>
 
     <script>
@@ -197,23 +162,13 @@
         function showRoseAnimation() {
             document.body.style.background = "#fff";
             document.getElementById('typing-container').style.color = "#272E5C";
-
             const foolImage = document.getElementById('fool-image');
             foolImage.style.opacity = 1;
 
-            // Play background audio with fade-in effect
+            // Play audio after interaction (works on mobile)
             const audio = document.getElementById('background-audio');
-            let volume = 0;
-            audio.volume = volume;
-            audio.play();
-            let fadeIn = setInterval(() => {
-                if (volume < 1) {
-                    volume += 0.1;
-                    audio.volume = volume;
-                } else {
-                    clearInterval(fadeIn);
-                }
-            }, 200);
+            audio.volume = 0;
+            audio.play().then(() => fadeInAudio(audio)).catch(err => console.log("Autoplay blocked:", err));
 
             for (let i = 0; i < 50; i++) {
                 const rose = document.createElement('div');
@@ -223,14 +178,24 @@
                 rose.style.animationDelay = Math.random() * 3 + "s";
                 rose.style.fontSize = Math.random() * 20 + 20 + "px";
                 document.body.appendChild(rose);
-                rose.addEventListener('animationend', () => {
-                    rose.remove();
-                });
+                rose.addEventListener('animationend', () => rose.remove());
             }
 
             document.getElementById('big-rose').style.display = 'block';
             document.getElementById('rose-text').style.display = 'block';
             document.getElementById('text-arrow').style.display = 'block';
+        }
+
+        function fadeInAudio(audio) {
+            let volume = 0;
+            const fadeInterval = setInterval(() => {
+                if (volume < 1) {
+                    volume += 0.1;
+                    audio.volume = volume;
+                } else {
+                    clearInterval(fadeInterval);
+                }
+            }, 200);
         }
 
         function redirectToProposal() {

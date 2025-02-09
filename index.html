@@ -27,7 +27,7 @@
             padding: 10px;
         }
 
-        .headline, .sub-headline {
+        .headline {
             font-family: 'Press Start 2P', cursive;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -40,14 +40,20 @@
             background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             max-width: 90%;
-        }
-
-        .headline {
             font-size: 2.5vw;
             margin-bottom: 2vh;
         }
 
         .sub-headline {
+            font-family: 'Press Start 2P', cursive;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+            padding: 5px;
+            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            max-width: 90%;
             font-size: 1.8vw;
             margin-bottom: 3vh;
         }
@@ -112,7 +118,7 @@
         <img src="usss.jpg" alt="Celebratory Image">
     </div>
 
-    <audio id="audio" src="prop3.mp3" autoplay></audio>
+    <audio id="audio" src="prop3.mp3" preload="auto"></audio>
 
     <script>
         window.onload = function() {

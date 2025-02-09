@@ -43,7 +43,11 @@
             cursor: pointer;
         }
 
-        .message span[data-tooltip]:hover::after {
+        .message span[data-tooltip] {
+            position: relative;
+        }
+
+        .message span[data-tooltip]::after {
             content: attr(data-tooltip);
             position: absolute;
             background: rgba(0, 0, 0, 0.8);
@@ -56,6 +60,12 @@
             transform: translateX(-50%);
             white-space: nowrap;
             z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .message span[data-tooltip]:hover::after {
             opacity: 1;
         }
 
@@ -98,13 +108,10 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
             font-size: 0.8rem;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
+            padding: 10px 15px;
         }
 
         #pleading-message { 
@@ -119,18 +126,23 @@
             animation: hover-effect 1.5s infinite;
             width: 80%;
             max-width: 400px; 
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        @keyframes hover-effect {
-            0%, 100% {
-                transform: translateY(0);
+        .glowing-tulip {
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            animation: glow 1.5s infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
             }
-            50% {
-                transform: translateY(-10px);
+            100% {
+                text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
             }
         }
+
     </style>
 </head>
 <body>
@@ -138,8 +150,6 @@
         <source src="prop1.mp3" type="audio/mp3">
     </audio>
 
-    <button class="mute-btn" id="mute-btn" onclick="toggleAudio()">Unmute</button>
-    
     <div class="container">
         <div class="message">
             Will <span data-tooltip="Chutki">You</span> Be <span data-tooltip="Abir">My</span> Girlfriend? Plsss🥺🥺🥺
@@ -148,24 +158,36 @@
             <button class="yes-btn" onclick="handleYes()">Yes</button>
             <button class="no-btn" onclick="handleNo()">No</button>
         </div>
+        <button class="mute-btn" id="mute-btn" onclick="toggleAudio()">Unmute</button>
     </div>
-    <div id="pleading-message">Pleaseee say yes! 😭</div>
+    <div id="pleading-message"></div>
 
     <script>
+        let messages = [
+            "Pleaseee say yes! I'm begging! 🙏",
+            "Amay erom bhabe na bolte parli toh?🥺",
+            "You're my sunshine, don't leave me in the rain! 🌞🌧️",
+            "Khuuuuuub dukkho dichhis amay 😭"
+        ];
+        let index = 0;
         let audio = document.getElementById("background-music");
         let muteBtn = document.getElementById("mute-btn");
 
         function handleYes() {
             document.body.style.background = "url('tulip_field.jpg') no-repeat center center/cover";
-            document.querySelector('.message').innerHTML = `I love you too hunnyyy<br>Mwahhhhhh 💕🌷`;
-            document.querySelector('.buttons').style.display = 'none';
-            document.getElementById('pleading-message').style.display = 'none';
+            setTimeout(() => {
+                document.querySelector('.message').innerHTML = `
+                    I love you too hunnyyy<br>
+                    Mwahhhhhh 💕<span class='glowing-tulip' onclick=\"window.location.href='https://roman-chao-tic.github.io/Proposal-2/'\">🌷</span>`;
+                document.querySelector('.buttons').style.display = 'none';
+                document.getElementById('pleading-message').style.display = 'none';
+            }, 500);
         }
 
         function handleNo() {
-            document.body.style.background = "url('depressedstorm.gif') no-repeat center center/cover";
-            document.getElementById('pleading-message').innerText = "Pleaseee say yes! 😭";
+            document.getElementById('pleading-message').innerText = messages[index];
             document.getElementById('pleading-message').style.display = 'block';
+            index = (index + 1) % messages.length;
         }
 
         function toggleAudio() {

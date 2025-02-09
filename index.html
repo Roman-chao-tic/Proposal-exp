@@ -3,245 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Girlfriend?</title>
+    <title>Interactive Tulip Animation</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: url('sunset.gif') no-repeat center center/cover;
             font-family: 'Press Start 2P', cursive;
+            background: #000; /* Set initial background to black */
             color: #fff;
-            text-align: center;
-            transition: background 1.5s ease-in-out;
+            overflow: hidden;
         }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .message {
-            font-size: 2rem;
-            font-weight: bold;
+        /* Typing container for the text */
+        #typing-container {
             position: relative;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px #000;
-            animation: hover-effect 1.5s infinite;
-            color: #2A562C;
-        }
-
-        .message span[data-tooltip] {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .message span[data-tooltip]:hover {
-            color: #ffd700;
-            text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700;
-        }
-
-        .message span[data-tooltip]:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: #ffd700;
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            border-radius: 5px;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            z-index: 10;
-            opacity: 0;
-            animation: fade-in 0.3s forwards;
-        }
-
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .buttons {
-            margin-top: 20px;
-        }
-
-        button {
-            font-family: 'Press Start 2P', cursive;
+            z-index: 3;
+            top: 50px;
+            left: 50px;
+            text-align: left;
             font-size: 1rem;
-            padding: 15px 30px;
-            margin: 10px;
-            border: none;
-            cursor: pointer;
+            padding: 20px;
             color: #fff;
-            background: linear-gradient(to bottom, #444, #222);
-            border: 4px solid #000;
-            box-shadow: 4px 4px 0 #000;
-            text-transform: uppercase;
-            text-shadow: 2px 2px #000;
-            transition: transform 0.1s ease;
+            width: auto;
+            max-width: 90%;
+            overflow: hidden;
         }
 
-        button:active {
-            transform: translate(4px, 4px);
-            box-shadow: none;
-        }
-
-        .yes-btn {
-            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
-            border-color: #1B5E20;
-        }
-
-        .no-btn {
-            background: linear-gradient(to bottom, #f44336, #C62828);
-            border-color: #B71C1C;
-        }
-
-        #pleading-message {
-            display: none;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2A562C;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-shadow: 2px 2px 4px #000;
-            animation: hover-effect 1.5s infinite;
-            width: 80%;
-            max-width: 400px;
-        }
-
-        .unmute-btn {
+        /* Fool image container */
+        #fool-image {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
-            padding: 10px 20px;
-            border: 2px solid #fff;
-            box-shadow: 4px 4px 0 #000;
-            cursor: pointer;
-            text-transform: uppercase;
-            text-shadow: 2px 2px #000;
-            transition: transform 0.1s ease;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('Fool.jpg') no-repeat center center/contain;
+            opacity: 0;
+            z-index: 2;
+            transition: opacity 1s ease;
         }
 
-        .unmute-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: none;
+        /* Rose animation (falling effect) */
+        .rose {
+            position: absolute;
+            top: -10%;
+            animation: fall 5s ease-in infinite;
+            pointer-events: none;
+            font-size: 20px;
+            z-index: 4;
         }
 
-        @keyframes hover-effect {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* Glowing Tulip Effect */
-        .glowing-tulip {
-            display: inline-block;
-            font-size: 2rem;
-            text-decoration: none;
-            animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
+        @keyframes fall {
             0% {
-                text-shadow: 0 0 5px #ff4da6, 0 0 10px #ff4da6, 0 0 15px #ff4da6;
+                transform: translateY(-10%);
             }
             100% {
-                text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 30px #ff4da6;
+                transform: translateY(110vh);
             }
         }
 
-        @media (max-width: 600px) {
-            .message {
-                font-size: 1.5rem;
-            }
+        /* Big rose with rainbow glow */
+        #big-rose {
+            position: absolute;
+            right: 50px;
+            bottom: 50px;
+            font-size: 80px;
+            cursor: pointer;
+            image-rendering: pixelated;
+            z-index: 5;
+            display: none;
+            animation: rainbow-glow 1.5s infinite alternate;
+        }
 
-            button {
-                font-size: 0.8rem;
-                padding: 10px 20px;
-            }
+        /* Rainbow glow animation */
+        @keyframes rainbow-glow {
+            0% { filter: drop-shadow(0 0 5px red); }
+            20% { filter: drop-shadow(0 0 5px orange); }
+            40% { filter: drop-shadow(0 0 5px yellow); }
+            60% { filter: drop-shadow(0 0 5px green); }
+            80% { filter: drop-shadow(0 0 5px blue); }
+            100% { filter: drop-shadow(0 0 5px violet); }
+        }
 
-            #pleading-message {
-                font-size: 1rem;
-            }
+        /* Text above the big rose */
+        #rose-text {
+            position: absolute;
+            right: 50px;
+            bottom: 250px;
+            color: #272E5C;
+            font-size: 1.2rem;
+            text-align: center;
+            display: none;
+            z-index: 5;
+            line-height: 1.5;
+        }
+
+        /* Arrow pointing to the rose */
+        #text-arrow {
+            position: absolute;
+            right: 85px;
+            bottom: 170px;
+            font-size: 50px;
+            color: #FF69B4;
+            display: none;
+            z-index: 5;
+        }
+
+        /* Nah button */
+        .no-btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border: 2px solid #c0392b;
+            background-color: #e74c3c;
+            color: #fff;
+            margin-top: 40px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .no-btn:hover {
+            background-color: #c0392b;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="message">
-            Will You<span data-tooltip="Chutki">*</span> Be My<span data-tooltip="Abir">*</span> Girlfriend? Plsss🥺🥺🥺
-        </div>
-        <div class="buttons">
-            <button class="yes-btn" onclick="handleYes()">Yes</button>
-            <button class="no-btn" onclick="handleNo()">No</button>
-        </div>
-    </div>
-    <div id="pleading-message">Pleaseee say yes! 😭</div>
-    <button class="unmute-btn" id="unmute-btn" onclick="toggleAudio()">Unmute</button>
+    <!-- Typing container for the text -->
+    <div id="typing-container"></div>
 
-    <audio id="background-audio" src="prop1.mp3" preload="auto" loop></audio>
+    <!-- Fool image (hidden initially) -->
+    <div id="fool-image"></div>
+
+    <!-- Text above the big rose -->
+    <div id="rose-text">
+        Take this rose<br>
+        from your fool
+    </div>
+
+    <!-- Arrow pointing to the rose -->
+    <div id="text-arrow">⬇</div>
+
+    <!-- Big rose with rainbow effect -->
+    <div id="big-rose" onclick="redirectToProposal()">🌹</div>
+
+    <!-- Audio element (hidden) -->
+    <audio id="background-audio" loop>
+        <source src="prop2.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        const audio = document.getElementById('background-audio');
-        const unmuteBtn = document.getElementById('unmute-btn');
-        const pleadingMessage = document.getElementById('pleading-message');
-        const messages = [
-            "Pleaseee say yes! I'm begging! 🙏",
-            "Amay erom bhabe na bolte parli toh?🥺",
-            "You're my sunshine, don't leave me in the rain! 🌞🌧️",
-            "Khuuuuuub dukkho dichhis amay 😭"
-        ];
-        let currentMessageIndex = 0;
-        let audioPlaying = false;
+        window.onload = () => {
+            const typingContainer = document.getElementById('typing-container');
+            typingContainer.style.display = 'block';
+            let text = "Gandu ta toke flowers dilo??";
+            typeText(typingContainer, text, () => {
+                addNahButton(typingContainer);
+            });
+        };
 
-        function toggleAudio() {
-            if (audioPlaying) {
-                audio.pause();
-                unmuteBtn.textContent = 'Unmute';
-            } else {
-                audio.play();
-                unmuteBtn.textContent = 'Mute';
+        function addNahButton(container) {
+            const button = document.createElement('button');
+            button.textContent = "Nah";
+            button.className = "no-btn";
+            button.onclick = () => {
+                button.remove();
+                typeText(container, "Jantammm!!!!!! What a f*cking incompetent😔", () => {
+                    setTimeout(() => {
+                        typeText(container, "Well, anyways ei ne phul from your fool", showRoseAnimation);
+                    }, 1000);
+                });
+            };
+            container.appendChild(button);
+        }
+
+        function typeText(container, text, callback) {
+            const newLine = document.createElement('div');
+            container.appendChild(newLine);
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    newLine.textContent += text[i];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 100);
+        }
+
+        function showRoseAnimation() {
+            document.body.style.background = "#fff";
+            document.getElementById('typing-container').style.color = "#272E5C";
+
+            const foolImage = document.getElementById('fool-image');
+            foolImage.style.opacity = 1;
+
+            // Play background audio with fade-in effect
+            const audio = document.getElementById('background-audio');
+            let volume = 0;
+            audio.volume = volume;
+            audio.play();
+            let fadeIn = setInterval(() => {
+                if (volume < 1) {
+                    volume += 0.1;
+                    audio.volume = volume;
+                } else {
+                    clearInterval(fadeIn);
+                }
+            }, 200);
+
+            for (let i = 0; i < 50; i++) {
+                const rose = document.createElement('div');
+                rose.textContent = "🌹";
+                rose.className = "rose";
+                rose.style.left = Math.random() * 100 + "vw";
+                rose.style.animationDelay = Math.random() * 3 + "s";
+                rose.style.fontSize = Math.random() * 20 + 20 + "px";
+                document.body.appendChild(rose);
+                rose.addEventListener('animationend', () => {
+                    rose.remove();
+                });
             }
-            audioPlaying = !audioPlaying;
+
+            document.getElementById('big-rose').style.display = 'block';
+            document.getElementById('rose-text').style.display = 'block';
+            document.getElementById('text-arrow').style.display = 'block';
         }
 
-        function handleYes() {
-            document.body.style.background = "url('tulip_field.jpg') no-repeat center center/cover";
-            setTimeout(() => {
-                document.querySelector('.message').innerHTML = `
-                    I love you too hunnyyy<br>
-                    Mwahhhhhh 💕<a href="https://roman-chao-tic.github.io/Proposal-2/" target="_blank" class="glowing-tulip">🌷</a>`;
-                document.querySelector('.buttons').style.display = 'none';
-                pleadingMessage.style.display = 'none';
-            }, 500);
-        }
-
-        function handleNo() {
-            document.body.style.background = "url('depressedstorm.gif') no-repeat center center/cover";
-            pleadingMessage.innerText = messages[currentMessageIndex];
-            pleadingMessage.style.display = 'block';
-            currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+        function redirectToProposal() {
+            window.location.href = "https://roman-chao-tic.github.io/Proposal-3/";
         }
     </script>
 </body>

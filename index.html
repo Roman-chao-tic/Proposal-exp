@@ -43,10 +43,6 @@
             cursor: pointer;
         }
 
-        .message span[data-tooltip] {
-            position: relative;
-        }
-
         .message span[data-tooltip]::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -63,6 +59,11 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease-in-out;
+        }
+
+        .message span[data-tooltip]:hover {
+            color: #ff0;
+            text-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
         }
 
         .message span[data-tooltip]:hover::after {
@@ -104,16 +105,6 @@
             border-color: #B71C1C;
         }
 
-        .mute-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 0.8rem;
-            padding: 10px 15px;
-        }
-
         #pleading-message { 
             display: none; 
             font-size: 1.5rem; 
@@ -126,20 +117,31 @@
             animation: hover-effect 1.5s infinite;
             width: 80%;
             max-width: 400px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes hover-effect {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .glowing-tulip {
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
             animation: glow 1.5s infinite alternate;
             cursor: pointer;
         }
 
         @keyframes glow {
             0% {
-                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
             }
             100% {
-                text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
+                text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff, 0 0 35px #ff00ff, 0 0 45px #ff00ff;
             }
         }
 
@@ -158,47 +160,44 @@
             <button class="yes-btn" onclick="handleYes()">Yes</button>
             <button class="no-btn" onclick="handleNo()">No</button>
         </div>
-        <button class="mute-btn" id="mute-btn" onclick="toggleAudio()">Unmute</button>
     </div>
-    <div id="pleading-message"></div>
+    <div id="pleading-message">Pleaseee say yes! 😭</div>
 
     <script>
-        let messages = [
+        let pleadingMessages = [
             "Pleaseee say yes! I'm begging! 🙏",
             "Amay erom bhabe na bolte parli toh?🥺",
             "You're my sunshine, don't leave me in the rain! 🌞🌧️",
             "Khuuuuuub dukkho dichhis amay 😭"
         ];
-        let index = 0;
-        let audio = document.getElementById("background-music");
-        let muteBtn = document.getElementById("mute-btn");
+        let messageIndex = 0;
 
         function handleYes() {
             document.body.style.background = "url('tulip_field.jpg') no-repeat center center/cover";
             setTimeout(() => {
                 document.querySelector('.message').innerHTML = `
                     I love you too hunnyyy<br>
-                    Mwahhhhhh 💕<span class='glowing-tulip' onclick=\"window.location.href='https://roman-chao-tic.github.io/Proposal-2/'\">🌷</span>`;
+                    Mwahhhhhh 💕<span class='glowing-tulip' onclick="window.location.href='https://roman-chao-tic.github.io/Proposal-2/'">🌷</span>`;
                 document.querySelector('.buttons').style.display = 'none';
                 document.getElementById('pleading-message').style.display = 'none';
             }, 500);
         }
 
         function handleNo() {
-            document.getElementById('pleading-message').innerText = messages[index];
-            document.getElementById('pleading-message').style.display = 'block';
-            index = (index + 1) % messages.length;
+            document.body.style.background = "url('depressedstorm.gif') no-repeat center center/cover";
+            setTimeout(() => {
+                document.getElementById('pleading-message').innerText = pleadingMessages[messageIndex];
+                document.getElementById('pleading-message').style.display = 'block';
+                messageIndex = (messageIndex + 1) % pleadingMessages.length;
+            }, 500);
         }
 
-        function toggleAudio() {
-            if (audio.paused) {
-                audio.play();
-                muteBtn.innerText = "Mute";
-            } else {
-                audio.pause();
-                muteBtn.innerText = "Unmute";
-            }
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            let audio = document.getElementById("background-music");
+            audio.play().catch(() => {
+                console.log("Auto-play was blocked. User interaction needed.");
+            });
+        });
     </script>
 </body>
 </html>

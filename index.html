@@ -62,13 +62,13 @@
         
         .rose {
             position: absolute;
-            top: 0;
+            top: -100px;
             animation: fall 4s linear infinite;
         }
         
         @keyframes fall {
-            from { transform: translateY(0); }
-            to { transform: translateY(100vh); }
+            from { transform: translateY(-100px); opacity: 1; }
+            to { transform: translateY(100vh); opacity: 0; }
         }
         
         #final-text {
@@ -137,7 +137,9 @@
         
         nahBtn.addEventListener('click', async () => {
             nahBtn.style.display = 'none';
-            await typeText("Jantammm!!!!!! What a f*cking incompetent\nWell, anyways ei ne phul from your fool", 100);
+            await typeText("Jantammm!!!!!! What a f*cking incompetent.", 100);
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Delay before next text
+            await typeText("Well, anyways ei ne phul from your fool", 100);
             setTimeout(() => {
                 imageContainer.style.opacity = 1;
                 finalText.style.display = 'block';

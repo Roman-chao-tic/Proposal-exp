@@ -50,14 +50,34 @@
             100% { transform: translateY(110vh); }
         }
 
-        #big-rose {
+        #big-rose-container {
             position: absolute;
-            right: 50px;
             bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            display: none;
+        }
+
+        #rose-text {
+            color: #000;
+            font-size: 1.2rem;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: block;
+        }
+
+        #text-arrow {
+            font-size: 50px;
+            color: #000;
+            display: block;
+        }
+
+        #big-rose {
             font-size: 80px;
             cursor: pointer;
-            z-index: 5;
-            display: none;
+            display: block;
             animation: rainbow-glow 1.5s infinite alternate;
         }
 
@@ -68,29 +88,6 @@
             60% { filter: drop-shadow(0 0 5px green); }
             80% { filter: drop-shadow(0 0 5px blue); }
             100% { filter: drop-shadow(0 0 5px violet); }
-        }
-
-        #rose-text {
-            position: absolute;
-            right: 150px;
-            bottom: 100px;
-            color: #000;
-            font-size: 1.2rem;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 5;
-            display: none;
-        }
-
-        #text-arrow {
-            position: absolute;
-            right: 130px;
-            bottom: 70px;
-            font-size: 50px;
-            color: #000;
-            display: none;
-            z-index: 5;
         }
 
         .no-btn {
@@ -114,9 +111,11 @@
 <body>
     <div id="typing-container"></div>
     <div id="fool-image"></div>
-    <div id="rose-text">Take this rose<br>from your fool</div>
-    <div id="text-arrow">⬇</div>
-    <div id="big-rose" onclick="redirectToProposal()">🌹</div>
+    <div id="big-rose-container">
+        <div id="rose-text">Take this rose<br>from your fool</div>
+        <div id="text-arrow">⬇</div>
+        <div id="big-rose" onclick="redirectToProposal()">🌹</div>
+    </div>
     <audio id="background-audio" loop>
         <source src="prop2.mp3" type="audio/mpeg">
     </audio>
@@ -165,35 +164,7 @@
             document.body.style.background = "#fff";
             document.getElementById('typing-container').style.color = "#272E5C";
             document.getElementById('fool-image').style.opacity = 1;
-
-            const audio = document.getElementById('background-audio');
-            let volume = 0;
-            audio.volume = volume;
-            audio.play();
-            let fadeIn = setInterval(() => {
-                if (volume < 1) {
-                    volume += 0.1;
-                    audio.volume = volume;
-                } else {
-                    clearInterval(fadeIn);
-                }
-            }, 200);
-
-            for (let i = 0; i < 50; i++) {
-                const rose = document.createElement('div');
-                rose.textContent = "🌹";
-                rose.className = "rose";
-                rose.style.left = Math.random() * 100 + "vw";
-                rose.style.animationDelay = Math.random() * 3 + "s";
-                document.body.appendChild(rose);
-                rose.addEventListener('animationend', () => {
-                    rose.remove();
-                });
-            }
-
-            document.getElementById('big-rose').style.display = 'block';
-            document.getElementById('rose-text').style.display = 'block';
-            document.getElementById('text-arrow').style.display = 'block';
+            document.getElementById('big-rose-container').style.display = 'block';
         }
 
         function redirectToProposal() {
